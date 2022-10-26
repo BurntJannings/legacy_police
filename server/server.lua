@@ -438,7 +438,7 @@ local Character = VORPcore.getUser(_source).getUsedCharacter
     print("target", target)
     print("fine", fine)
     if Character.group == "admin" then
-        TriggerServerEvent("lawmen:FinePlayer", tonumber(target), tonumber(fine))
+        TriggerEvent("lawmen:FinePlayer", tonumber(target), tonumber(fine))
     end
 end)
 
@@ -448,7 +448,7 @@ local Character = VORPcore.getUser(_source).getUsedCharacter
     local target = args[1]
     local jailtime = args[2]
     if Character.group == "admin" then
-        TriggerServerEvent('lawmen:JailPlayer', tonumber(target), tonumber(jailtime))
+        TriggerEvent('lawmen:JailPlayer', tonumber(target), tonumber(jailtime), "sk")
     else
         TriggerEvent("vorp:TipRight", "Not on duty", 2000)
     end
@@ -459,6 +459,6 @@ RegisterCommand('unjail', function(source, args, rawCommand)
 local Character = VORPcore.getUser(_source).getUsedCharacter
     local target = args[1]
     if Character.group == "admin" then
-        TriggerServerEvent("lawmen:unjail", tonumber(target))
+        TriggerEvent("lawmen:unjail", tonumber(target))
     end
 end)
