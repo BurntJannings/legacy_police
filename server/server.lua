@@ -422,9 +422,10 @@ AddEventHandler("lawmen:policenotify", function(players, coords)
     local Character = VorpCore.getUser(_source).getUsedCharacter
     local job = Character.job -- player job
 
-        if CheckTable(Config.Jobs,job) then -- if job exist in table then pass
+        if CheckTable(Marshal_Jobs,job) then -- if job exist in table then pass
 
 				TriggerClientEvent("witness", m, coords)
+
         end
 
 end)
