@@ -407,3 +407,25 @@ VORP_INV.RegisterUsableItem("handcuffs", function(data)--Handcuffs usable
     TriggerClientEvent("lawmen:cuffs", data.source)
 end)
 
+function CheckTable(table, element)
+    for k, v in pairs(table) do
+        if v == element then
+            return true
+        end
+    end
+    return false
+end
+
+RegisterServerEvent("lawmen:policenotify")
+AddEventHandler("lawmen:policenotify", function(players, coords)
+    local _source = source -- id 
+    local Character = VorpCore.getUser(_source).getUsedCharacter
+    local job = Character.job -- player job
+
+        if CheckTable(Config.Jobs,job) then -- if job exist in table then pass
+
+				TriggerClientEvent("witness", m, coords)
+        end
+
+end)
+
