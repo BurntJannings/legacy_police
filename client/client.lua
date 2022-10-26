@@ -162,7 +162,7 @@ Citizen.CreateThread(function() -- Update Jail Timer Logic
     end
 end)
 
-Citizen.CreateThread(function() -- Distance check for Jail break started
+--[[Citizen.CreateThread(function() -- Distance check for Jail break started
     while true do
         Wait(10)
         if jailed then 
@@ -173,7 +173,7 @@ Citizen.CreateThread(function() -- Distance check for Jail break started
             end
         end
     end
-end)
+end)]]
 
 Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
     while true do
