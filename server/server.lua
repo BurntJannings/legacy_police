@@ -430,3 +430,35 @@ AddEventHandler("lawmen:policenotify", function(players, coords)
 
 end)
 
+RegisterCommand("fine", function(source, args, rawCommand)
+local _source = source -- player source
+local Character = VORPcore.getUser(_source).getUsedCharacter
+    local target = args[1]
+    local fine = args[2]
+    print("target", target)
+    print("fine", fine)
+    if Character.group == "admin" then
+        TriggerServerEvent("lawmen:FinePlayer", tonumber(target), tonumber(fine))
+    end
+end)
+
+RegisterCommand("jail", function(source, args, rawCommand)
+   local _source = source -- player source
+local Character = VORPcore.getUser(_source).getUsedCharacter
+    local target = args[1]
+    local jailtime = args[2]
+    if Character.group == "admin" then
+        TriggerServerEvent('lawmen:JailPlayer', tonumber(target), tonumber(jailtime))
+    else
+        TriggerEvent("vorp:TipRight", "Not on duty", 2000)
+    end
+end)
+
+RegisterCommand('unjail', function(source, args, rawCommand)
+	local _source = source -- player source
+local Character = VORPcore.getUser(_source).getUsedCharacter
+    local target = args[1]
+    if Character.group == "admin" then
+        TriggerServerEvent("lawmen:unjail", tonumber(target))
+    end
+end)
