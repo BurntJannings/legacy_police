@@ -36,41 +36,41 @@ AddEventHandler("lawmen:goondutysv", function(ptable)
                 player.setJob('police', grade)
                 local message = playername.. " Went On Duty as police " ..grade
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
-                TriggerClientEvent('vorp:TipRight', _source, 'You are now On Duty')
+		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)			
             elseif job == 'offwepolice' then
                 player.setJob('wepolice', grade)
                 local message = playername.. " Went On Duty as wepolice " ..grade
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
-                TriggerClientEvent('vorp:TipRight', _source, 'You are now On Duty')
-            elseif job == 'offnhpolice' then
+		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
+		elseif job == 'offnhpolice' then
                 player.setJob('nhpolice', grade)
                 local message = playername.. " Went On Duty as nhpolice " ..grade
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
-                TriggerClientEvent('vorp:TipRight', _source, 'You are now On Duty')
-            elseif job == 'offlepolice' then
+		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
+		elseif job == 'offlepolice' then
                 player.setJob('lepolice', grade)
                 local message = playername.. " Went On Duty as lepolice " ..grade
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
-                TriggerClientEvent('vorp:TipRight', _source, 'You are now On Duty')
-            elseif job == 'offmarshal' then
+		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
+		elseif job == 'offmarshal' then
                 player.setJob('marshal', grade)
                 local message = playername.. " Went On Duty as marshal " ..grade
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
-                TriggerClientEvent('vorp:TipRight', _source, 'You are now On Duty')
-            elseif job == 'offpinkerton' then
+		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
+		elseif job == 'offpinkerton' then
                 player.setJob('pinkerton', grade)
                 local message = playername.. " Went On Duty as pinkerton " ..grade
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
-                TriggerClientEvent('vorp:TipRight', _source, 'You are now On Duty')
-            elseif job == 'offranger' then
+		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
+		elseif job == 'offranger' then
                 player.setJob('ranger', grade)
                 local message = playername.. " Went On Duty as ranger " ..grade
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
-                TriggerClientEvent('vorp:TipRight', _source, 'You are now On Duty')
-            end
+		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
+		end
             TriggerClientEvent("lawmen:onduty", _source, true)
         else
-            TriggerClientEvent("vorp:TipRight", _source, "You cannot take duty. Max cops online: "..Config.MaxCops, 2000)
+            VORPcore.NotifyBottomRight(_source,"You cannot take duty. Max cops online: "..Config.MaxCops,4000)	
         end
         break
     end
@@ -88,7 +88,7 @@ AddEventHandler("lawmen:gooffdutysv", function()
             player.setJob('off'..job, grade)
             local message = playername.. " Went Off Duty as off"..job.. ' ' ..grade
             TriggerEvent('Log', webhook, "Police Duty", message, 255)
-            TriggerClientEvent('vorp:TipRight', _source, 'You are now Off Duty')
+		VORPcore.NotifyBottomRight(_source,"You are now Off Duty",4000)
             TriggerClientEvent("lawmen:offdutycl", _source, false)
         end
         TriggerClientEvent("lawmen:onduty", _source, false)
@@ -117,8 +117,8 @@ AddEventHandler('lawmen:FinePlayer', function(player, amount)
                     Target.removeCurrency(0, fine)
                     exports.ghmattimysql:executeSync('UPDATE society_ledger SET ledger = ledger + @fine WHERE job = @job', { fine = fine, job = Society_Account })
                 end
-                TriggerClientEvent("vorp:TipRight", _source, 'You fined '..Target.firstname..' '..Target.lastname..' $'..amount, 10000)
-                TriggerClientEvent("vorp:TipRight", player, 'You received a fine of $'..fine, 10000)
+		VORPcore.NotifyBottomRight(_source,You fined '..Target.firstname..' '..Target.lastname..' $'..amount,4000)
+		VORPcore.NotifyBottomRight(player,'You received a fine of $'..fine,4000)
             end
         end
     end
@@ -142,7 +142,7 @@ AddEventHandler('lawmen:JailPlayer', function(player, amount, loc)
         if result ~= nil then
             TriggerClientEvent("lawmen:JailPlayer", player, amount)
         else
-            TriggerClientEvent("vorp:TipRight", _source, 'An error occurred in that query', 5000)
+	VORPcore.NotifyBottomRight(_source,'An error occurred in that query',4000)
         end
     end)
 end)
@@ -160,9 +160,10 @@ AddEventHandler('lawmen:CommunityService', function(player, chore,amount)
         if result ~= nil then
             print(amount)
             TriggerClientEvent("lawmen:ServicePlayer", player, chore, amount)
-            TriggerClientEvent("vorp:TipRight", player, "You have been given Community Service", 2000) 
+            TriggerClientEvent("vorp:TipRight", player, "You have been given Community Service", 2000)
+		VORPcore.NotifyBottomRight(player,'You have been given Community Service',4000)
         else
-            TriggerClientEvent("vorp:TipRight", _source, 'An error occurred in that query', 5000)
+	VORPcore.NotifyBottomRight(_source,'An error occurred in that query',4000)
         end
     end)
 end)
@@ -179,7 +180,7 @@ AddEventHandler("lawmen:unjail", function(target_id)
         if result ~= nil then
             TriggerClientEvent("lawmen:UnjailPlayer", target_id)
         else
-            TriggerClientEvent("vorp:TipRight", _source, 'An error occurred in that query', 5000)
+	VORPcore.NotifyBottomRight(_source,'An error occurred in that query',4000)
         end
     end)
 end)
@@ -230,7 +231,7 @@ AddEventHandler('lawmen:lockpicksv', function(player)
     local user = VORPcore.getUser(_source).getUsedCharacter
     if chance < 5 then
         VORP_INV.subItem(_source, 'lockpick', 1)
-        TriggerClientEvent("vorp:TipBottom", _source, "~pa~"..user.firstname.." "..user.lastname.."~q~: Gosh Darnit! My Lockpick broke!", 2000)
+	VORPcore.NotifyBottomRight(_source,"~pa~"..user.firstname.." "..user.lastname.."~q~: Gosh Darnit! My Lockpick broke!",4000)
     else
         TriggerClientEvent('lawmen:lockpicked', player)
     end
@@ -289,8 +290,8 @@ AddEventHandler("lawmen:endservice", function()
     local Character = CharInfo.charIdentifier
     exports.ghmattimysql:execute("DELETE FROM communityservice WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character}, function(result)
         if result[1] ~= nil then
-            
-    VORPcore.NotifyRightTip(_source,"You have completed Community Service, straighten up",4000)
+      VORPcore.NotifyBottomRight(_source,"You have completed Community Service, straighten up",4000)
+
         end
     end)
 end)
@@ -306,8 +307,7 @@ AddEventHandler("lawmen:jailedservice", function()
     local Character = CharInfo.charIdentifier
     exports.ghmattimysql:execute("DELETE FROM communityservice WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character}, function(result)
         if result[1] ~= nil then
-            
-    VORPcore.NotifyRightTip(_source,"You have been jailed for breaking Community Service, straighten up",4000)
+       VORPcore.NotifyBottomRight(_source,"You have been jailed for breaking Community Service, straighten up",4000)
         end
     end)
 end)
@@ -394,7 +394,7 @@ AddEventHandler('lawmen:lockpick:break', function()
     local _source = source
 	local user = VORPcore.getUser(_source).getUsedCharacter
 	VorpInv.subItem(_source, "lockpick", 1)
-	TriggerClientEvent("vorp:TipBottom", _source, "Gosh Darnit!, My Lockpick broke!", 2000)	
+	VORPcore.NotifyBottomRight(_source, "Gosh Darnit!, My Lockpick broke!",4000)
 end)
 
 VORP_INV.RegisterUsableItem("lockpick", function(data)--Lockpick usable
