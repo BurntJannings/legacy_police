@@ -101,7 +101,7 @@ Citizen.CreateThread(function() -- Community Service Logic, including animations
                                         choreamount = choreamount - 1
                                         TriggerServerEvent("lawmen:updateservice")
                                     else
-                                        TriggerEvent("vorp:TipRight", "You failed", 2000)
+					VORPcore.NotifyBottomRight("You failed",4000)
                                     end
                                 else
                                     TaskStartScenarioInPlace(PlayerPedId(), GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 10000, true, false, false, false)
@@ -118,7 +118,7 @@ Citizen.CreateThread(function() -- Community Service Logic, including animations
             serviced = false
             RemoveBlip(serviceblip) 
             serviceblip = nil  
-            VORPcore.NotifyRightTip("You have completed Community Service, straighten up",4000)
+		VORPcore.NotifyBottomRight("You have completed Community Service, straighten up",4000)
             break
         end
 
@@ -274,7 +274,7 @@ function openPolicemenu() -- Base Police Menu Logic
                     Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), 0xDB4C451D, true, false, true)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 end
-                TriggerEvent("vorp:TipRight", "You have put on your star", 2000)
+		VORPcore.NotifyBottomRight("You have put on your star",4000)		
                 star = true
             else
                 if not IsPedMale(ped) then
@@ -284,7 +284,7 @@ function openPolicemenu() -- Base Police Menu Logic
                     Citizen.InvokeNative(0x0D7FFA1B2F69ED82, PlayerPedId(), 0xDB4C451D, 0, 0)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 end
-                TriggerEvent("vorp:TipRight", "You took your star off", 2000)
+		VORPcore.NotifyBottomRight("You took your star off",4000)
                 star = false
             end
 
@@ -296,7 +296,8 @@ function openPolicemenu() -- Base Police Menu Logic
             if closestPlayer ~= -1 and closestDistance <= 3.0 then
                 TriggerServerEvent('lawmen:drag', GetPlayerServerId(closestPlayer))
             else
-                TriggerEvent("vorp:TipRight", "Not close enough", 2000)
+		VORPcore.NotifyBottomRight("Not close enough",4000)	
+            
             end
 
         elseif (data.current.value == 'fine') then
@@ -626,7 +627,7 @@ AddEventHandler("lawmen:breakout", function()
     local local_ped = PlayerPedId()
     local local_player = PlayerId()
     TriggerServerEvent('lawmen:jailbreak')
-    TriggerEvent("vorp:TipBottom", "You have been broken out from prison. Now Run!", 5000)
+	VORPcore.NotifyBottomRight("You have been broken out from prison. Now Run!",4000)	
     jailed = false
     jail_time = 0
     SetPlayerInvincible(local_player, false)
@@ -651,7 +652,7 @@ end)
 RegisterNetEvent("lawmen:goonduty") -- Go on duty event
 AddEventHandler("lawmen:goonduty", function()
     if policeOnDuty then
-        TriggerEvent("vorp:TipRight", "You are already on Duty", 2000)
+	VORPcore.NotifyBottomRight("You are already on Duty",4000)		
     else
         TriggerServerEvent('lawmen:goondutysv', GetPlayers())
     end
@@ -811,8 +812,7 @@ print(autotele)
 
             DoScreenFadeIn(500)
             Citizen.Wait(600)
-
-            TriggerEvent("vorp:TipBottom", '~pa~Police~q~: You have been imprisoned for '..time_minutes..' minutes', 5000)
+		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for '..time_minutes..' minutes",4000)
             FreezeEntityPosition(ped, false)
             TriggerEvent("police_job:wear_prison", ped)
             else 
@@ -820,7 +820,7 @@ print(autotele)
                 jailed = true
                 Citizen.Wait(600)
                 RemoveAllPedWeapons(ped, true)
-                TriggerEvent("vorp:TipBottom", '~pa~Police~q~: You have been imprisoned for '..time_minutes..' minutes', 5000)
+		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for '..time_minutes..' minutes",4000)
                 TriggerEvent("police_job:wear_prison", ped)
             end
         end
@@ -870,7 +870,7 @@ AddEventHandler("lawmen:UnjailPlayer", function()
     local local_ped = PlayerPedId()
     local local_player = PlayerId()
     ExecuteCommand('rc')
-    TriggerEvent("vorp:TipBottom", "~pa~Police~q~: You have been released from prison. Now straighten up and fly right!", 5000)
+VORPcore.NotifyBottomRight("~pa~Police~q~: You have been released from prison. Now straighten up and fly right!",4000)
     jailed = false
     jail_time = 0
     if autotele then
@@ -969,7 +969,7 @@ AddEventHandler("lawmen:lockpick", function()
             end
         end
     else
-        TriggerEvent("vorp:TipRight", "No Player Nearby", 3000)
+	VORPcore.NotifyBottomRight("No Player Nearby",4000)
         return
     end
     
@@ -1035,7 +1035,7 @@ function PutInOutVehicle() --Not fuctioning currently
     if closestPlayer ~= -1 and closestDistance <= 3.0 then
         TriggerServerEvent('lawmen:putinoutvehicle', GetPlayerServerId(closestPlayer))
     else
-        TriggerEvent("vorp:TipRight", "No Player Nearby", 2000)
+	VORPcore.NotifyBottomRight("No Player Nearby",4000)	
         return
     end
 end
@@ -1059,7 +1059,7 @@ function HandcuffPlayer() --Handcuff player function
     if closestPlayer ~= -1 and closestDistance <= 3.0 then
         TriggerServerEvent('lawmen:handcuff', GetPlayerServerId(closestPlayer))
     else
-        TriggerEvent("vorp:TipRight", "No Player Nearby", 10000)
+	VORPcore.NotifyBottomRight("No Player Nearby",4000)
         return
     end
 end
