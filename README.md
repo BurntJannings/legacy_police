@@ -22,10 +22,7 @@ Now contains-
 
 -Auto Jail Capability or Manual Jail
 
--Jail if leave community service area
-
--Jail Break Currently only Notifies from Siska Prison
-
--Notification for Jailbreak
+****JAIL BREAK NOT CURRENTLY NOTIFYING OR TELEPORTING BACK***
+Next Patch ;)
 
 Big Thanks to the Community for suggestions, feedback, help and more! Here yall go!
