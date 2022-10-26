@@ -1178,6 +1178,15 @@ Citizen.CreateThread(function() -- Timer for leaving community service logic, wh
     end
 end)
 
+RegisterNetEvent("lawmen:witness")
+AddEventHandler("lawmen:witness", function(coords)
+	local player = PlayerPedId()
+	local coord = GetEntityCoords(player)
+			TriggerEvent("vorp:NotifyLeft", "Crime Reported", "A Jail Break has been reported", "generic_textures", "star", 6000)
+			local blip = Citizen.InvokeNative(0x45f13b7e0a15c880, -1282792512, coords.x, coords.y, coords.z, 20.0)
+			Wait(60000)--Time till notify blips dispears, 1 min
+		RemoveBlip(blip)
+end)
 
 AddEventHandler('onResourceStop', function(resource) -- on resource restart remove serviceblips
 	if resource == GetCurrentResourceName() then
