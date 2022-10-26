@@ -16,8 +16,6 @@ Now contains-
 
 -Complete Config File for easy changes
 
--Added Translations in Config
-
 -Badge Toggle
 
 -Auto Jail Capability or Manual Jail
