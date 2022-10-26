@@ -59,20 +59,7 @@ Config.UpdateJailTime = 30000--Can do 60000 * # of minutes even, IE, I get jaile
                               
 Config.Prompt = "Open Cabinet"
 
-
-
-
 Config.ExitFromSiska = { ["x"] = 2670.49, ["y"] = -1545.06, ["z"] = 45.97 } -- Where to get let out from Siska
-
-Config.Jails = {
-    val = {
-        x = -273.05, y = 810.97, z = 119.37 
-    },
-    siska = {
-        x = 3359.64, y = -668.57, z = 45.78 
-    }
-
-}
 
 Config.jailchores = {
 
@@ -125,16 +112,4 @@ Config.StDenis = {
 
 Config.Annesburg = {
      x = 3359.64, y = -668.57, z = 45.78 
-}
-
-
-Marshal_DutyWeapons = {
-    guns = {
-        {label = "LeMat Revolver", weapon = "WEAPON_REVOLVER_LEMAT", ammo = {["AMMO_REVOLVER"] = 60}, comps = {['nothing'] = 0}},
-        {label = "Evans Repeater", weapon = "WEAPON_REPEATER_EVANS", ammo = {["AMMO_REPEATER"] = 60}, comps = {["nothing"] = 0}}
-    }
-}
-
-WeaponLabels = {
-    ['WEAPON_REVOLVER_LEMAT'] = 'LEMAT REVOLVER',
 }
