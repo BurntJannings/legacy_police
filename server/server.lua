@@ -117,7 +117,7 @@ AddEventHandler('lawmen:FinePlayer', function(player, amount)
                     Target.removeCurrency(0, fine)
                     exports.ghmattimysql:executeSync('UPDATE society_ledger SET ledger = ledger + @fine WHERE job = @job', { fine = fine, job = Society_Account })
                 end
-		VORPcore.NotifyBottomRight(_source,You fined '..Target.firstname..' '..Target.lastname..' $'..amount,4000)
+		VORPcore.NotifyBottomRight(_source,'You fined '..Target.firstname..' '..Target.lastname..' $'..amount,4000)
 		VORPcore.NotifyBottomRight(player,'You received a fine of $'..fine,4000)
             end
         end
