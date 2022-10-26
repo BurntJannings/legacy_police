@@ -672,7 +672,7 @@ RegisterCommand(Config.offdutycommand, function() -- Go off duty command
 end)
 
 RegisterCommand(Config.openpolicemenu, function()
-    if is policeOnDuty and not isDead then
+    if policeOnDuty and not isDead then
         openPolicemenu()
     else
         return
