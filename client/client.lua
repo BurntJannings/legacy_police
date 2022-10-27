@@ -435,7 +435,7 @@ end
 	function(data, menu)
 		menu.close()
 	end)
-end
+end]]
 
 function OpenFineMenu() -- Fine Menu logic
 	MenuData.CloseAll()
