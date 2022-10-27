@@ -369,7 +369,7 @@ function OpenJailMenu() -- Jail menu logic
         elseif (data.current.value == 'jail') then
             TriggerServerEvent('lawmen:JailPlayer', tonumber(playerid), tonumber(timeinjail), jailid)
 
-        elseif (data.current.value == 'auto') then
+       --[[ elseif (data.current.value == 'auto') then
             if autotele == false then
                 autotele = true
                 tele = "True"
@@ -380,7 +380,7 @@ function OpenJailMenu() -- Jail menu logic
                 tele = "False"
                 menu.close()
                 OpenJailMenu()
-            end
+            end]]
 
         elseif (data.current.value == 'loc') then
             OpenSubJailMenu()
@@ -396,7 +396,7 @@ function OpenJailMenu() -- Jail menu logic
 	end)
 end
 
-function OpenSubJailMenu() -- Choosing Jail menu logic
+--[[function OpenSubJailMenu() -- Choosing Jail menu logic
 	MenuData.CloseAll()
 	local elements = {
 		{label = "Valentine Sheriff Office", value = "val" , desc = "Jail Citizen to Valentine Sheriff Office in a Cell" },
@@ -495,7 +495,7 @@ function OpenFineMenu() -- Fine Menu logic
 	function(data, menu)
 		menu.close()
 	end)
-end
+end]]
 
 function OpenCommunityMenu() -- Community service menu logic
     print(chore)
