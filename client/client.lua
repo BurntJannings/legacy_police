@@ -768,7 +768,7 @@ end)
 
 RegisterNetEvent("lawmen:JailPlayer") -- Jailing player event
 AddEventHandler("lawmen:JailPlayer", function(time)
-    local ped = PlayerPedId()
+    local ped = playerid
     local time_minutes = math.floor(time/60)
     serviced = false
 print(autotele)
@@ -867,7 +867,7 @@ end)
 
 RegisterNetEvent("lawmen:UnjailPlayer") -- Unjail player event
 AddEventHandler("lawmen:UnjailPlayer", function()
-    local local_ped = PlayerPedId()
+    local local_ped = playerid
     local local_player = PlayerId()
     ExecuteCommand('rc')
 VORPcore.NotifyBottomRight("~pa~Police~q~: You have been released from prison. Now straighten up and fly right!",4000)
