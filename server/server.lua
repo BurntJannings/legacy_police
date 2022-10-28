@@ -133,18 +133,17 @@ AddEventHandler('lawmen:JailPlayer', function(player, amount, loc)
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
 
+
+    print(player)
+    print(loc)
+
     -- TIME
     local time_m = tostring(amount)
     local amount = amount * 60
     local timestamp = getTime() + amount
 
-    exports.ghmattimysql:execute("INSERT INTO jail (identifier, characterid, name, time, time_s, jaillocation) VALUES (@identifier, @characterid, @name, @timestamp, @time, @jaillocation)", {["@identifier"] = steam_id, ["@characterid"] = Character, ["@name"] = user_name, ["@timestamp"] = timestamp, ["@time"] = amount, ["@jaillocation"] = loc}, function(result)
-        if result ~= nil then
-            TriggerClientEvent("lawmen:JailPlayer", player, amount)
-        else
-	VORPcore.NotifyBottomRight(_source,'An error occurred in that query',4000)
-        end
-    end)
+    exports.ghmattimysql:execute("INSERT INTO jail (identifier, characterid, name, time, time_s, jaillocation) VALUES (@identifier, @characterid, @name, @timestamp, @time, @jaillocation)", {["@identifier"] = steam_id, ["@characterid"] = Character, ["@name"] = user_name, ["@timestamp"] = timestamp, ["@time"] = amount, ["@jaillocation"] = loc})
+            TriggerClientEvent("lawmen:JailPlayer",player, amount,loc)
 end)
 
 RegisterServerEvent('lawmen:CommunityService')--Start community Service event
@@ -156,33 +155,37 @@ AddEventHandler('lawmen:CommunityService', function(player, chore,amount)
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
 
-    exports.ghmattimysql:execute("INSERT INTO communityservice (identifier, characterid, name, communityservice, servicecount) VALUES (@identifier, @characterid, @name, @communityservice, @servicecount)", {["@identifier"] = steam_id, ["@characterid"] = Character, ["@name"] = user_name, ["@communityservice"] = chore, ["@servicecount"] = amount}, function(result)
-        if result ~= nil then
+    exports.ghmattimysql:execute("INSERT INTO communityservice (identifier, characterid, name, communityservice, servicecount) VALUES (@identifier, @characterid, @name, @communityservice, @servicecount)", {["@identifier"] = steam_id, ["@characterid"] = Character, ["@name"] = user_name, ["@communityservice"] = chore, ["@servicecount"] = amount})
+
             print(amount)
             TriggerClientEvent("lawmen:ServicePlayer", player, chore, amount)
             TriggerClientEvent("vorp:TipRight", player, "You have been given Community Service", 2000)
 		VORPcore.NotifyBottomRight(player,'You have been given Community Service',4000)
-        else
-	VORPcore.NotifyBottomRight(_source,'An error occurred in that query',4000)
-        end
-    end)
+
+    
 end)
 
 RegisterServerEvent("lawmen:unjail") --Unjail event
-AddEventHandler("lawmen:unjail", function(target_id)
+AddEventHandler("lawmen:unjail", function(target_id,loc)
     local _source = source
     local User = VORPcore.getUser(target_id)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
 
-    exports.ghmattimysql:execute("DELETE FROM jail WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character}, function(result)
-        if result ~= nil then
-            TriggerClientEvent("lawmen:UnjailPlayer", target_id)
-        else
-	VORPcore.NotifyBottomRight(_source,'An error occurred in that query',4000)
+    exports.ghmattimysql:execute("DELETE FROM jail WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character})
+
+    exports.ghmattimysql:execute("SELECT * FROM `jail` WHERE characterid = @characterid", {["@characterid"] = Character}, function(result)
+
+        if result[1] then
+            local loc = result[1]["jaillocation"]
+            print(loc)
+            TriggerClientEvent("lawmen:UnjailPlayer", target_id,loc)   
         end
     end)
+
+
+
 end)
 
 RegisterServerEvent('lawmen:GetID') -- Get id event currently not used
@@ -447,8 +450,9 @@ RegisterCommand("jail", function(source, args, rawCommand)
 local Character = VORPcore.getUser(_source).getUsedCharacter
     local target = args[1]
     local jailtime = args[2]
+    local jailid = args[3]
     if Character.group == "admin" then
-        TriggerEvent('lawmen:JailPlayer', tonumber(target), tonumber(jailtime), "sk")
+        TriggerEvent('lawmen:JailPlayer', tonumber(target), tonumber(jailtime), jailid)
     else
         TriggerEvent("vorp:TipRight", "Not on duty", 2000)
     end
