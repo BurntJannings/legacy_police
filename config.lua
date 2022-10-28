@@ -55,11 +55,9 @@ Config.RepeaterAmmoAmount = 60 -- Repeater ammo amount
                              --How many MS you want to update jail db timer, making it so if they relog the time will be saved every so often
 Config.UpdateJailTime = 30000--Can do 60000 * # of minutes even, IE, I get jailed for 5 minutes the timer updates every minute, I leave 2 minutes in
                              --Come back and have 3 minutes left      
-                              
-                              
+                                                      
 Config.Prompt = "Open Cabinet"
 
-Config.ExitFromSiska = { ["x"] = 2670.49, ["y"] = -1545.06, ["z"] = 45.97 } -- Where to get let out from Siska
 
 Config.jailchores = {
 
@@ -78,38 +76,79 @@ Config.construction = {
 
 }
 
-Config.Siska = {
-     x = 3359.64, y = -668.57, z = 45.78  --Siska
-}
+Config.Jails = {
+     siska = {
+          entrance = {
+               x = 3359.64, y = -668.57, z = 45.78  --Siska
+               },
+               exit ={
+                    x = 2670.49, y = -1545.06, z = 45.97
+               }
+     },
+     blackwater = {
+          entrance = {
+               x = -764.861, y = -1268.605, z = 44.09 
+               },
+               exit= {
+                    x = -755.13, y = -1269.58, z = 44.02
+               }
+     },
+     valentine = {
+          entrance = {
+               x = -273.05, y = 810.97, z = 119.37 
+          },
+               exit= {
+                    x = -276.76, y = 815.19, z = 119.21
+               }
+     },
+     armadillo = {
+          entrance = {
+               x = -3619.05, y = -2600.14, z = -13.34
+          },
+               exit= {
+                    x = -3629.63, y = -2606.69, z = -13.73
+               }
+     },
+     tumbleweed = {
+          entrance = {
+               x = -5528.93, y = -2929.11, z = -1.36
+          },
+               exit= {
+                    x = -5525.88, y = -2930.76, z = -2.01
+               }
+     },
+     strawberry = {
+          entrance = {
+               x = -1810.91, y = -351.38, z = 161.43
+          },
+               exit= {
+                    x = -1806.98, y = -353.38, z = 164.15
+               }
+     },
+     rhodes = {
+          entrance = {
+               x = 1356.05, y = -1301.87, z = 77.76
+          },
+               exit= {
+                    x = 1356.59, y = -1297.34, z = 76.81
+               }
+     },
+     stdenis = {
+          entrance = {
+               x = 2502.75, y = -1310.78, z = 48.95
+          },
+               exit= {
+                    x = 2490.69, y = -1315.26, z = 48.87
+               }
+     },
+     annesburg = {
+          entrance = {
+               x = 2901.57, y = 1310.95, z = 44.93
+          },
+               exit= {
+                    x = 2911.99, y = 1307.32, z = 44.66
+               }
+     }
 
-Config.Blackwater = {
-    x = -766.72, y = -1263.79, z = 44.02
-}
 
-Config.Valentine = {
-    x = -273.05, y = 810.97, z = 119.37 
-}
-
-Config.Armadillo = {
-    x = -3619.05, y = -2600.14, z = -13.34
-}
-
-Config.Tumbleweed = {
-    x = -5528.93, y = -2929.11, z = -1.36
-}
-
-Config.Strawberry = {
-    x = -1810.91, y = -351.38, z = 161.43
-}
-
-Config.Rhodes = {
-    x = 1356.05, y = -1301.87, z = 77.76
-}
-
-Config.StDenis = {
-    x = 2502.75, y = -1310.78, z = 48.95
-}
-
-Config.Annesburg = {
-x = 2901.57, y = 1310.95, z = 44.93
 }
