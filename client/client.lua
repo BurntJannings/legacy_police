@@ -14,6 +14,7 @@ local chore = "None"
 local choreamount = "None"
 local currentCheck
 local notinjail = false
+local jaillocation
 
 policeOnDuty = nil
 
@@ -197,7 +198,7 @@ end)
 
 --Start of Menu Code
 
-Playerid = { -- Player ID input
+idinput = { -- Player ID input
     type = "enableinput", -- don't touch
     inputType = "input", -- input type
     button = "Confirm", -- button name
@@ -342,9 +343,9 @@ function OpenJailMenu() -- Jail menu logic
          
 		elseif (data.current.value == 'id') then 
             
-            TriggerEvent("vorpinputs:advancedInput", json.encode(Playerid), function(result)
-                local amount = result
-                if result ~= "" and result then -- make sure its not empty or nil
+            TriggerEvent("vorpinputs:advancedInput", json.encode(idinput), function(result)
+                local amount = tonumber(result)
+                if amount > 0 and amount then -- make sure its not empty or nil
                     playerid = amount
                     menu.close()
                     OpenJailMenu()
@@ -369,7 +370,7 @@ function OpenJailMenu() -- Jail menu logic
         elseif (data.current.value == 'jail') then
             TriggerServerEvent('lawmen:JailPlayer', tonumber(playerid), tonumber(timeinjail), jailid)
 
-       --[[ elseif (data.current.value == 'auto') then
+        elseif (data.current.value == 'auto') then
             if autotele == false then
                 autotele = true
                 tele = "True"
@@ -380,14 +381,14 @@ function OpenJailMenu() -- Jail menu logic
                 tele = "False"
                 menu.close()
                 OpenJailMenu()
-            end]]
+            end
 
         elseif (data.current.value == 'loc') then
             OpenSubJailMenu()
 
         elseif (data.current.value == 'unjail') then
             
-            TriggerServerEvent('lawmen:unjail', playerid)
+            TriggerServerEvent('lawmen:unjail', playerid,jailid)
 
         end
 	end,
@@ -396,7 +397,7 @@ function OpenJailMenu() -- Jail menu logic
 	end)
 end
 
---[[function OpenSubJailMenu() -- Choosing Jail menu logic
+function OpenSubJailMenu() -- Choosing Jail menu logic
 	MenuData.CloseAll()
 	local elements = {
 		{label = "Valentine Sheriff Office", value = "val" , desc = "Jail Citizen to Valentine Sheriff Office in a Cell" },
@@ -435,7 +436,7 @@ end
 	function(data, menu)
 		menu.close()
 	end)
-end]]
+end
 
 function OpenFineMenu() -- Fine Menu logic
 	MenuData.CloseAll()
@@ -459,7 +460,7 @@ function OpenFineMenu() -- Fine Menu logic
         
     elseif (data.current.value == 'id') then 
             
-            TriggerEvent("vorpinputs:advancedInput", json.encode(Playerid), function(result)
+            TriggerEvent("vorpinputs:advancedInput", json.encode(idinput), function(result)
                 local amount = result
                 if result ~= "" and result then -- make sure its not empty or nil
                     playerid = amount
@@ -520,7 +521,7 @@ function OpenCommunityMenu() -- Community service menu logic
         
     elseif (data.current.value == 'id') then 
             
-            TriggerEvent("vorpinputs:advancedInput", json.encode(Playerid), function(result)
+            TriggerEvent("vorpinputs:advancedInput", json.encode(idinput), function(result)
                 local amount = result
                 if result ~= "" and result then -- make sure its not empty or nil
                     playerid = amount
@@ -767,42 +768,36 @@ AddEventHandler('lawmen:drag', function(copId)
 end)
 
 RegisterNetEvent("lawmen:JailPlayer") -- Jailing player event
-AddEventHandler("lawmen:JailPlayer", function(time)
-    local ped = PlayerId()
+AddEventHandler("lawmen:JailPlayer", function(time,loc)
+    local ped = PlayerPedId()
     local time_minutes = math.floor(time/60)
+    local jailid = loc
+    jaillocation = loc
     serviced = false
 print(autotele)
+print(jailid)
         if not jailed then
             if autotele then
             DoScreenFadeOut(500)
             Citizen.Wait(600)
             if jailid == "sk" then
-               local coords = Config.Siska
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)                      
+               SetEntityCoords(ped, Config.Jails.siska.entrance.x, Config.Jails.siska.entrance.y, Config.Jails.siska.entrance.z)
             elseif jailid == "bw" then
-                local coords = Config.Blackwater
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.blackwater.entrance.x, Config.Jails.blackwater.entrance.y, Config.Jails.blackwater.entrance.z)
             elseif jailid == "st" then
-                local coords = Config.Strawberry
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.strawberry.entrance.x, Config.Jails.strawberry.entrance.y, Config.Jails.strawberry.entrance.z)
             elseif jailid == "val" then
-                coords = Config.Valentine
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.valentine.entrance.x, Config.Jails.valentine.entrance.y, Config.Jails.valentine.entrance.z)
             elseif jailid == "ar" then
-                local coords = Config.Armadillo
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.armadillo.entrance.x, Config.Jails.armadillo.entrance.y, Config.Jails.armadillo.entrance.z)
             elseif jailid == "tu" then
-                local coords = Config.Tumbleweed
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.tumbleweed.entrance.x, Config.Jails.tumbleweed.entrance.y, Config.Jails.tumbleweed.entrance.z)
             elseif jailid == "rh" then
-                local coords = Config.Rhodes
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.rhodes.entrance.x, Config.Jails.rhodes.entrance.y, Config.Jails.rhodes.sentrance.z)
             elseif jailid == "sd" then
-                local coords = Config.StDenis
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.stdenis.entrance.x, Config.Jails.stdenis.entrance.y, Config.Jails.stdenis.entrance.z)
             elseif jailid == "an" then
-                local coords = Config.Annesburg
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
+                SetEntityCoords(ped, Config.Jails.annesburg.entrance.x, Config.Jails.annesburg.entrance.y, Config.Jails.annesburg.entrance.z)
             end
 
             FreezeEntityPosition(ped, true)
@@ -812,7 +807,7 @@ print(autotele)
 
             DoScreenFadeIn(500)
             Citizen.Wait(600)
-		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for '..time_minutes..' minutes",4000)
+		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for" ..time_minutes.. "minutes",4000)
             FreezeEntityPosition(ped, false)
             TriggerEvent("police_job:wear_prison", ped)
             else 
@@ -820,7 +815,7 @@ print(autotele)
                 jailed = true
                 Citizen.Wait(600)
                 RemoveAllPedWeapons(ped, true)
-		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for '..time_minutes..' minutes",4000)
+		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for" ..time_minutes.. "minutes",4000)
                 TriggerEvent("police_job:wear_prison", ped)
             end
         end
@@ -867,14 +862,33 @@ end)
 
 RegisterNetEvent("lawmen:UnjailPlayer") -- Unjail player event
 AddEventHandler("lawmen:UnjailPlayer", function()
-    local local_ped = PlayerId()
+    local local_ped = PlayerPedId()
     local local_player = PlayerId()
+    local jailid = jaillocation
     ExecuteCommand('rc')
 VORPcore.NotifyBottomRight("~pa~Police~q~: You have been released from prison. Now straighten up and fly right!",4000)
     jailed = false
     jail_time = 0
     if autotele then
-    SetEntityCoords(local_ped, Config.ExitFromSiska.x, Config.ExitFromSiska.y, Config.ExitFromSiska.z)
+        if jailid == "sk" then
+            SetEntityCoords(local_ped, Config.Jails.siska.exit.x, Config.Jails.siska.exit.y, Config.Jails.siska.exit.z)
+            elseif jailid == "bw" then
+             SetEntityCoords(local_ped, Config.Jails.blackwater.exit.x, Config.Jails.blackwater.exit.y, Config.Jails.blackwater.exit.z)
+            elseif jailid == "st" then
+             SetEntityCoords(local_ped, Config.Jails.strawberry.exit.x, Config.Jails.strawberry.exit.y, Config.Jails.strawberry.exit.z)
+            elseif jailid == "val" then
+             SetEntityCoords(local_ped, Config.Jails.valentine.exit.x, Config.Jails.valentine.exit.y, Config.Jails.valentine.exit.z)
+            elseif jailid == "ar" then
+             SetEntityCoords(local_ped, Config.Jails.armadillo.exit.x, Config.Jails.armadillo.exit.y, Config.Jails.armadillo.exit.z)
+            elseif jailid == "tu" then
+             SetEntityCoords(local_ped, Config.Jails.tumbleweed.exit.x, Config.Jails.tumbleweed.exit.y, Config.Jails.tumbleweed.exit.z)
+            elseif jailid == "rh" then
+             SetEntityCoords(local_ped, Config.Jails.rhodes.exit.x, Config.Jails.rhodes.exit.y, Config.Jails.rhodes.exit.z)
+            elseif jailid == "sd" then
+             SetEntityCoords(local_ped, Config.Jails.stdenis.exit.x, Config.Jails.stdenis.exit.y, Config.Jails.stdenis.exit.z)
+            elseif jailid == "an" then
+             SetEntityCoords(local_ped, Config.Jails.annesburg.exit.x, Config.Jails.annesburg.exit.y, Config.Jails.annesburg.exit.z)
+        end
     SetPlayerInvincible(local_player, false)
     else 
         SetPlayerInvincible(local_player, false)
@@ -1016,8 +1030,9 @@ Citizen.CreateThread(function() -- Added time if over max distance/count down un
                 SetPlayerInvincible(local_player, true)
             end
             if jail_time < 1 then
+                print(jaillocation)
                 local player_server_id = GetPlayerServerId(PlayerId())
-                TriggerServerEvent("lawmen:unjail", player_server_id)
+                TriggerServerEvent("lawmen:unjail", player_server_id,jaillocation)
             else
 
                 jail_time = jail_time - 1
