@@ -495,7 +495,7 @@ function OpenFineMenu() -- Fine Menu logic
 	function(data, menu)
 		menu.close()
 	end)
-end]]
+end
 
 function OpenCommunityMenu() -- Community service menu logic
     print(chore)
