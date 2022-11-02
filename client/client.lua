@@ -176,26 +176,34 @@ end)
     end
 end)]]
 
-Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
+Citizen.CreateThread(function() -- Button Press for menu
     while true do
         Wait(0)
-        local coords = GetEntityCoords(PlayerPedId())
-        for k, v in pairs(Config.Guncabinets) do
-
-            if GetDistanceBetweenCoords(coords,v.x, v.y, v.z, true) < 1.5 then
-                OpenCabinet()
-                local item_name = CreateVarString(10, 'LITERAL_STRING', Config.Prompt)
-                PromptSetActiveGroupThisFrame(prompt, item_name)
-                    if IsControlJustReleased(0, 0xC7B5340A) then	          
-                    EquipmentMenu()
-                    end
-
+        if policeOnDuty then
+            if IsControlJustReleased(0, 0xF1301666) then
+                OpenPoliceMenu()
             end
         end
 
     end
 end)
 
+
+
+function CheckTable(table, element) --Job checking table
+    for k, v in pairs(table) do
+        if v == element then
+            return true
+        end
+    end
+    return false
+end
+
+RegisterNetEvent("legacy_police:PlayerJob") -- Job check event
+AddEventHandler("legacy_police:PlayerJob", function(Job)
+	playerJob = Job
+
+end)
 --Start of Menu Code
 
 idinput = { -- Player ID input
