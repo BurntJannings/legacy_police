@@ -7,16 +7,30 @@ TriggerEvent("getCore",function(core)
     VORPcore = core
 end)
 
+
+function CheckTable(table, element)
+    for k, v in pairs(table) do
+        if v == element then
+            return true
+        end
+    end
+    return false
+end
+
 RegisterServerEvent("lawmen:goondutysv") -- Go on duty, add cop count, restrict based off Max cop count event
 AddEventHandler("lawmen:goondutysv", function(ptable)
     local cops = 0
+        local _source = source
+        local player = VORPcore.getUser(_source).getUsedCharacter
+        local job = player.job
+    if CheckTable(OffDutyJobs,job) then
 
     for _,i in pairs(ptable) do
         local player = VORPcore.getUser(i).getUsedCharacter
         local pJob = player.job
         local grade = player.jobGrade
 
-        for k,v in pairs(Marshal_Jobs) do
+        for k,v in pairs(OffDutyJobs) do
             if pJob == v then
                     cops = cops + 1
             end
@@ -68,12 +82,16 @@ AddEventHandler("lawmen:goondutysv", function(ptable)
                 TriggerEvent('Log', webhook, "Police Duty", message, 255)
 		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
 		end
-            TriggerClientEvent("lawmen:onduty", _source, true)
+            TriggerClientEvent("lawmen:onduty", _source, job, true)
         else
             VORPcore.NotifyBottomRight(_source,"You cannot take duty. Max cops online: "..Config.MaxCops,4000)	
         end
         break
     end
+else
+    VORPcore.NotifyBottomRight(_source,"You do not have the right job",4000)	
+end
+
 end)
 
 RegisterServerEvent("lawmen:gooffdutysv") -- Go off duty event
@@ -465,4 +483,15 @@ local Character = VORPcore.getUser(_source).getUsedCharacter
     if Character.group == "admin" then
         TriggerEvent("lawmen:unjail", tonumber(target))
     end
+end)
+
+RegisterServerEvent('legacy_police:PlayerJob')
+AddEventHandler('legacy_police:PlayerJob', function()
+    local _source = source
+    local Character = VORPcore.getUser(_source).getUsedCharacter
+    local CharacterJob = Character.job
+
+
+    TriggerClientEvent('legacy_police:PlayerJob', _source, CharacterJob)
+
 end)
