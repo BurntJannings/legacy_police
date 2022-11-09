@@ -190,9 +190,6 @@ AddEventHandler("lawmen:unjail", function(target_id,loc)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
-
-    exports.ghmattimysql:execute("DELETE FROM jail WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character})
-
     exports.ghmattimysql:execute("SELECT * FROM `jail` WHERE characterid = @characterid", {["@characterid"] = Character}, function(result)
 
         if result[1] then
@@ -201,8 +198,7 @@ AddEventHandler("lawmen:unjail", function(target_id,loc)
             TriggerClientEvent("lawmen:UnjailPlayer", target_id,loc)   
         end
     end)
-
-
+    exports.ghmattimysql:execute("DELETE FROM jail WHERE identifier = @identifier AND characterid = @characterid", {["@identifier"] = steam_id, ["@characterid"] = Character})
 
 end)
 
