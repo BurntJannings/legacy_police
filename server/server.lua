@@ -398,8 +398,17 @@ end)
 
 RegisterServerEvent("lawmen:guncabinet")-- Adds weapon from gun cabinet
 AddEventHandler("lawmen:guncabinet", function(weapon, ammoList, compList)
+    print('working')
     local _source = source
     VORP_INV.createWeapon(_source, weapon, ammoList, compList)
+end)
+
+RegisterServerEvent("lawmen:addammo")-- Adds weapon from gun cabinet
+AddEventHandler("lawmen:addammo", function(ammotype)
+    print('working')
+    print(ammotype)
+    local _source = source
+	VORP_INV.addItem(_source, ammotype, 1)
 end)
 
 function getTime () -- GEt time function
@@ -410,7 +419,7 @@ RegisterServerEvent('lawmen:lockpick:break')--Lockpick broke event
 AddEventHandler('lawmen:lockpick:break', function()
     local _source = source
 	local user = VORPcore.getUser(_source).getUsedCharacter
-	VorpInv.subItem(_source, "lockpick", 1)
+	VORP_INV.subItem(_source, "lockpick", 1)
 	VORPcore.NotifyBottomRight(_source, "Gosh Darnit!, My Lockpick broke!",4000)
 end)
 
