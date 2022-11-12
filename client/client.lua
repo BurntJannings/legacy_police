@@ -182,14 +182,15 @@ Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
         local coords = GetEntityCoords(PlayerPedId())
         for k, v in pairs(Config.Guncabinets) do
 
-            if GetDistanceBetweenCoords(coords,v.x, v.y, v.z, true) < 1.5 then
+            if GetDistanceBetweenCoords(coords,v.x, v.y, v.z, true) < 1.5 and not inmenu then
                 OpenCabinet()
                 local item_name = CreateVarString(10, 'LITERAL_STRING', Config.Prompt)
                 PromptSetActiveGroupThisFrame(prompt, item_name)
                     if IsControlJustReleased(0, 0xC7B5340A) then
                         TriggerServerEvent("legacy_police:PlayerJob") -- run client side check before check for distance. no need to run code that is not meant for the client its optimized this way
                         if CheckTable(Marshal_Jobs,playerJob) then
-                    EquipmentMenu()
+                            inmenu = true
+                            CabinetMenu()
                     end
                end
             end
@@ -198,17 +199,6 @@ Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
     end
 end)
 
-Citizen.CreateThread(function() -- Button Press for menu
-    while true do
-        Wait(0)
-        if policeOnDuty then
-            if IsControlJustReleased(0, 0xF1301666) then
-                OpenPoliceMenu()
-            end
-        end
-
-    end
-end)
 
 function CheckTable(table, element) --Job checking table
     for k, v in pairs(table) do
@@ -278,8 +268,9 @@ end)
 
 function openPolicemenu() -- Base Police Menu Logic
 	MenuData.CloseAll()
+    local ped = PlayerPedId()
 	local elements = {
-		{label = "Sheriff Star", value = 'star' , desc = "Put On Your Star"},
+		{label = Config.badgename, value = 'star' , desc = "Put On Your Star"},
 		{label = "Cuff/Uncuff Citizen", value = 'cuff' , desc = "Cuff a Citizen"},
 		{label = "Escort", value = 'escort' , desc = "Escort a Citizen"},
         {label = "Fine Menu", value = 'fine' , desc = "Fine a Citizen"},
@@ -288,7 +279,7 @@ function openPolicemenu() -- Base Police Menu Logic
 	}
    MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
 	{
-		title    = "Sheriff Menu",
+		title    = Config.menuname,
 		subtext    = "Actions",
 		align    = 'top-left',
 		elements = elements,
@@ -436,7 +427,7 @@ function OpenSubJailMenu() -- Choosing Jail menu logic
         {label = "Armadillo Sheriff Office", value = "ar" , desc = "Jail Citizen to Armadillo Sheriff Office in a Cell" },
 		{label = "Tumbleweed Sheriff Office", value = "tu" , desc = "Jail Citizen to Tumbleweed Sheriff Office in a Cell" },
 		{label = "Annesburg Sheriff Office", value = "an" , desc = "Jail Citizen to Annesburg Sheriff Office in a Cell" },
-        {label = "Siska Prison", value = "sk" , desc = "Jail Citizen to Siska Prison" },
+        {label = "Sisika Prison", value = "sk" , desc = "Jail Citizen to Sisika Prison" },
 
 
 	}
@@ -614,17 +605,110 @@ function OpenChoreTypeMenu() -- Set chore menu logic
 	end)
 end
 
-
-function EquipmentMenu() -- Choosing Jail menu logic
+function CabinetMenu() -- Set chore menu logic
 	MenuData.CloseAll()
 	local elements = {
-		{label = Config.RevolverName, value = "revolver" , desc = "Grab a basic Revolver" },
-        {label = Config.RepeaterName, value = 'repeater' , desc = "Grab a basic Repeater" },
+        {label = "Ammo", value = 'ammo' , desc = "Grab Ammo " },
+        {label = "Weapons", value = 'wep' , desc = "Grab Weapons " },
 
 	}
    MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
 	{
-		title    = "Equipment Menu",
+		title    = "Cabinet Menu",
+		subtext    = "Actions",
+		align    = 'top-left',
+		elements = elements,
+	},
+	function(data, menu)
+        if data.current == "backup" then
+            _G[data.trigger]()
+        
+        elseif data.current.value == "ammo" then 
+            AmmoMenu()
+        elseif data.current.value == "wep" then 
+            WeaponMenu()
+        end
+	end,
+	function(data, menu)
+		menu.close()
+        inmenu = false
+	end)
+end
+
+function AmmoMenu() -- Choosing Jail menu logic
+	MenuData.CloseAll()
+	local elements = {
+		{label = Config.RevolverAmmoType, value = "ammo1" , desc = "Grab your ammo" },
+        {label = Config.RifleAmmoType, value = "ammo2" , desc = "Grab your ammo" },
+		{label = Config.ShotgunAmmoType, value = "ammo3" , desc = "Grab your ammo" },
+		{label = Config.RepeaterAmmoType, value = "ammo4" , desc = "Grab your ammo" },
+
+
+	}
+   MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
+	{
+		title    = "Ammo Menu",
+		subtext    = "Get Your Ammo",
+		align    = 'top-left',
+		elements = elements,
+	},
+	function(data, menu)
+        if data.current == "backup" then
+            _G[data.trigger]()
+        
+    elseif data.current.value == "ammo1" then 
+        ammotype = Config.RevolverAmmoType
+        TriggerServerEvent("lawmen:addammo", ammotype)
+        inmenu = false
+
+        menu.close()
+
+    elseif data.current.value == "ammo2" then 
+        ammotype = Config.RifleAmmoType
+
+        TriggerServerEvent("lawmen:addammo",ammotype)
+        inmenu = false
+
+        menu.close()
+
+    elseif data.current.value == "ammo3" then 
+        ammotype = Config.ShotgunAmmoType
+
+        TriggerServerEvent("lawmen:addammo",ammotype)
+        inmenu = false
+
+        menu.close()
+    elseif data.current.value == "ammo4" then 
+        ammotype = Config.RepeaterAmmoType
+
+        TriggerServerEvent("lawmen:addammo",ammotype)
+        inmenu = false
+
+        menu.close()
+        end
+	end,
+	function(data, menu)
+        inmenu = false
+		menu.close()
+	end)
+end
+
+function WeaponMenu() -- Choosing Jail menu logic
+	MenuData.CloseAll()
+	local elements = {
+		{label = Config.RevolverName1, value = "revolver1" , desc = "Grab a basic revolver" },
+        {label = Config.RevolverName2, value = "revolver2" , desc = "Grab a basic revolver" },
+		{label = Config.RifleName, value = "rifle" , desc = "Grab a basic rifle" },
+		{label = Config.KnifeName, value = "knife" , desc = "Grab a basic knife" },
+		{label = Config.ShotgunName, value = "shotgun" , desc = "Grab a basic shotgun" },
+        {label = Config.LassoName, value = "lasso" , desc = "Grab a lasso" },
+        {label = Config.RepeaterName, value = 'repeater' , desc = "Grab a basic Repeater" },
+
+
+	}
+   MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
+	{
+		title    = "Weapon Menu",
 		subtext    = "Get Your Gear",
 		align    = 'top-left',
 		elements = elements,
@@ -633,20 +717,47 @@ function EquipmentMenu() -- Choosing Jail menu logic
         if data.current == "backup" then
             _G[data.trigger]()
         
-    elseif data.current.value == "revolver" then 
-        local ammo = {[Config.RevolverAmmoType] = Config.RevolverAmmoAmount}
-        local comps = {['nothing'] = 0}
-        TriggerServerEvent("lawmen:guncabinet", Config.RevolverSpawnName, ammo, comps)
+    elseif data.current.value == "revolver1" then 
+        TriggerServerEvent("lawmen:guncabinet", Config.RevolverSpawnName1)
+        inmenu = false
+
         menu.close()
 
+    elseif data.current.value == "knife" then 
+        TriggerServerEvent("lawmen:guncabinet", Config.KnifeSpawnName)
+        inmenu = false
+
+        menu.close()
+
+    elseif data.current.value == "lasso" then 
+        TriggerServerEvent("lawmen:guncabinet", Config.LassoSpawnName)
+        inmenu = false
+
+        menu.close()
+    elseif data.current.value == "revolver2" then 
+        TriggerServerEvent("lawmen:guncabinet", Config.RevolverSpawnName2)
+        inmenu = false
+
+        menu.close()
+    elseif data.current.value == "shotgun" then 
+        TriggerServerEvent("lawmen:guncabinet", Config.ShotgunSpawnName)
+        inmenu = false
+
+        menu.close()
+    elseif data.current.value == "rifle" then 
+        TriggerServerEvent("lawmen:guncabinet", Config.RifleSpawnName)
+        inmenu = false
+
+        menu.close()
     elseif data.current.value == "repeater" then 
-        local ammo = {[Config.RepeaterAmmoType] = Config.RepeaterAmmoAmount}
-        local comps = {['nothing'] = 0}
-        TriggerServerEvent("lawmen:guncabinet", Config.RepeaterSpawnName, ammo, comps)
+        TriggerServerEvent("lawmen:guncabinet", Config.RepeaterSpawnName)
+        inmenu = false
+
         menu.close()
         end
 	end,
 	function(data, menu)
+        inmenu = false
 		menu.close()
 	end)
 end
@@ -809,7 +920,7 @@ print(jailid)
             DoScreenFadeOut(500)
             Citizen.Wait(600)
             if jailid == "sk" then
-               SetEntityCoords(ped, Config.Jails.siska.entrance.x, Config.Jails.siska.entrance.y, Config.Jails.siska.entrance.z)
+               SetEntityCoords(ped, Config.Jails.sisika.entrance.x, Config.Jails.sisika.entrance.y, Config.Jails.sisika.entrance.z)
             elseif jailid == "bw" then
                 SetEntityCoords(ped, Config.Jails.blackwater.entrance.x, Config.Jails.blackwater.entrance.y, Config.Jails.blackwater.entrance.z)
             elseif jailid == "st" then
@@ -821,7 +932,7 @@ print(jailid)
             elseif jailid == "tu" then
                 SetEntityCoords(ped, Config.Jails.tumbleweed.entrance.x, Config.Jails.tumbleweed.entrance.y, Config.Jails.tumbleweed.entrance.z)
             elseif jailid == "rh" then
-                SetEntityCoords(ped, Config.Jails.rhodes.entrance.x, Config.Jails.rhodes.entrance.y, Config.Jails.rhodes.sentrance.z)
+                SetEntityCoords(ped, Config.Jails.rhodes.entrance.x, Config.Jails.rhodes.entrance.y, Config.Jails.rhodes.entrance.z)
             elseif jailid == "sd" then
                 SetEntityCoords(ped, Config.Jails.stdenis.entrance.x, Config.Jails.stdenis.entrance.y, Config.Jails.stdenis.entrance.z)
             elseif jailid == "an" then
@@ -835,7 +946,7 @@ print(jailid)
 
             DoScreenFadeIn(500)
             Citizen.Wait(600)
-		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for" ..time_minutes.. "minutes",4000)
+		VORPcore.NotifyBottomRight("You have been imprisoned for " ..time_minutes.. " minutes",4000)
             FreezeEntityPosition(ped, false)
             TriggerEvent("police_job:wear_prison", ped)
             else 
@@ -843,7 +954,7 @@ print(jailid)
                 jailed = true
                 Citizen.Wait(600)
                 RemoveAllPedWeapons(ped, true)
-		VORPcore.NotifyBottomRight("~pa~Police~q~: You have been imprisoned for" ..time_minutes.. "minutes",4000)
+		VORPcore.NotifyBottomRight("You have been imprisoned for " ..time_minutes.. " minutes",4000)
                 TriggerEvent("police_job:wear_prison", ped)
             end
         end
@@ -894,12 +1005,12 @@ AddEventHandler("lawmen:UnjailPlayer", function()
     local local_player = PlayerId()
     local jailid = jaillocation
     ExecuteCommand('rc')
-VORPcore.NotifyBottomRight("~pa~Police~q~: You have been released from prison. Now straighten up and fly right!",4000)
+VORPcore.NotifyBottomRight("You have been released from prison. Now straighten up and fly right!",4000)
     jailed = false
     jail_time = 0
     if autotele then
         if jailid == "sk" then
-            SetEntityCoords(local_ped, Config.Jails.siska.exit.x, Config.Jails.siska.exit.y, Config.Jails.siska.exit.z)
+            SetEntityCoords(local_ped, Config.Jails.sisika.exit.x, Config.Jails.sisika.exit.y, Config.Jails.sisika.exit.z)
             elseif jailid == "bw" then
              SetEntityCoords(local_ped, Config.Jails.blackwater.exit.x, Config.Jails.blackwater.exit.y, Config.Jails.blackwater.exit.z)
             elseif jailid == "st" then
