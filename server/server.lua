@@ -1,5 +1,4 @@
 local VORP_INV = exports.vorp_inventory:vorp_inventoryApi()
-local VORP_API = exports.vorp_core:vorpAPI()
 local webhook = ""
 local VORPcore = {}
 
@@ -150,11 +149,6 @@ AddEventHandler('lawmen:JailPlayer', function(player, amount, loc)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
-
-
-    print(player)
-    print(loc)
-
     -- TIME
     local time_m = tostring(amount)
     local amount = amount * 60
@@ -175,9 +169,7 @@ AddEventHandler('lawmen:CommunityService', function(player, chore,amount)
 
     exports.ghmattimysql:execute("INSERT INTO communityservice (identifier, characterid, name, communityservice, servicecount) VALUES (@identifier, @characterid, @name, @communityservice, @servicecount)", {["@identifier"] = steam_id, ["@characterid"] = Character, ["@name"] = user_name, ["@communityservice"] = chore, ["@servicecount"] = amount})
 
-            print(amount)
             TriggerClientEvent("lawmen:ServicePlayer", player, chore, amount)
-            TriggerClientEvent("vorp:TipRight", player, "You have been given Community Service", 2000)
 		VORPcore.NotifyBottomRight(player,'You have been given Community Service',4000)
 
     
@@ -194,7 +186,6 @@ AddEventHandler("lawmen:unjail", function(target_id,loc)
 
         if result[1] then
             local loc = result[1]["jaillocation"]
-            print(loc)
             TriggerClientEvent("lawmen:UnjailPlayer", target_id,loc)   
         end
     end)
@@ -398,15 +389,12 @@ end)
 
 RegisterServerEvent("lawmen:guncabinet")-- Adds weapon from gun cabinet
 AddEventHandler("lawmen:guncabinet", function(weapon, ammoList, compList)
-    print('working')
     local _source = source
     VORP_INV.createWeapon(_source, weapon, ammoList, compList)
 end)
 
 RegisterServerEvent("lawmen:addammo")-- Adds weapon from gun cabinet
 AddEventHandler("lawmen:addammo", function(ammotype)
-    print('working')
-    print(ammotype)
     local _source = source
 	VORP_INV.addItem(_source, ammotype, 1)
 end)
@@ -461,8 +449,6 @@ local _source = source -- player source
 local Character = VORPcore.getUser(_source).getUsedCharacter
     local target = args[1]
     local fine = args[2]
-    print("target", target)
-    print("fine", fine)
     if Character.group == "admin" then
         TriggerEvent("lawmen:FinePlayer", tonumber(target), tonumber(fine))
     end
