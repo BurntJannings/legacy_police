@@ -708,7 +708,7 @@ function WeaponMenu() -- Choosing Jail menu logic
 	}
    MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
 	{
-		title    = "Weapon Menu",
+		title    = "test Menu",
 		subtext    = "Get Your Gear",
 		align    = 'top-left',
 		elements = elements,
