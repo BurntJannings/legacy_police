@@ -784,8 +784,14 @@ RegisterNetEvent("lawmen:onduty")
 AddEventHandler("lawmen:onduty", function(duty)
     if not duty then
         policeOnDuty = false
+        if Config.synsociety then
+            TriggerServerEvent('lawmen:synsociety',false)
+        end
     else
         policeOnDuty = true
+        if Config.synsociety then
+            TriggerServerEvent('lawmen:synsociety',true)
+        end
     end
 end)
 
