@@ -18,79 +18,59 @@ end
 
 RegisterServerEvent("lawmen:goondutysv") -- Go on duty, add cop count, restrict based off Max cop count event
 AddEventHandler("lawmen:goondutysv", function(ptable)
-    local cops = 0
-        local _source = source
-        local player = VORPcore.getUser(_source).getUsedCharacter
-        local job = player.job
-    if CheckTable(OffDutyJobs,job) then
-
-    for _,i in pairs(ptable) do
-        local player = VORPcore.getUser(i).getUsedCharacter
-        local pJob = player.job
-        local grade = player.jobGrade
-
-        for k,v in pairs(OffDutyJobs) do
-            if pJob == v then
-                    cops = cops + 1
-            end
-        end
-    end
-
-    print("cops online server", cops)
-
-    for k,v in pairs(OffDutyJobs) do
         local _source = source
         local player = VORPcore.getUser(_source).getUsedCharacter
         local job = player.job
         local grade = player.jobGrade
         local playername = player.firstname.. ' ' ..player.lastname
-        if cops < Config.MaxCops then
-            if job == 'offpolice' then
-                player.setJob('police', grade)
-                local message = playername.. " Went On Duty as police " ..grade
-                TriggerEvent('Log', webhook, "Police Duty", message, 255)
-		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)			
-            elseif job == 'offwepolice' then
-                player.setJob('wepolice', grade)
-                local message = playername.. " Went On Duty as wepolice " ..grade
-                TriggerEvent('Log', webhook, "Police Duty", message, 255)
-		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
-		elseif job == 'offnhpolice' then
-                player.setJob('nhpolice', grade)
-                local message = playername.. " Went On Duty as nhpolice " ..grade
-                TriggerEvent('Log', webhook, "Police Duty", message, 255)
-		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
-		elseif job == 'offlepolice' then
-                player.setJob('lepolice', grade)
-                local message = playername.. " Went On Duty as lepolice " ..grade
-                TriggerEvent('Log', webhook, "Police Duty", message, 255)
-		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
-		elseif job == 'offmarshal' then
-                player.setJob('marshal', grade)
-                local message = playername.. " Went On Duty as marshal " ..grade
-                TriggerEvent('Log', webhook, "Police Duty", message, 255)
-		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
-		elseif job == 'offpinkerton' then
-                player.setJob('pinkerton', grade)
-                local message = playername.. " Went On Duty as pinkerton " ..grade
-                TriggerEvent('Log', webhook, "Police Duty", message, 255)
-		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
-		elseif job == 'offranger' then
-                player.setJob('ranger', grade)
-                local message = playername.. " Went On Duty as ranger " ..grade
-                TriggerEvent('Log', webhook, "Police Duty", message, 255)
-		VORPcore.NotifyBottomRight(_source,"You are now On Duty",4000)	
-		end
-            TriggerClientEvent("lawmen:onduty", _source, job, true)
-        else
-            VORPcore.NotifyBottomRight(_source,"You cannot take duty. Max cops online: "..Config.MaxCops,4000)	
-        end
-        break
-    end
-else
-    VORPcore.NotifyBottomRight(_source,"You do not have the right job",4000)	
-end
+    if CheckTable(OffDutyJobs,job) then
 
+            if job == OffDutyJobs[1] then
+                player.setJob(OnDutyJobs[1], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)			
+            elseif OffDutyJobs[2] then
+                player.setJob(OnDutyJobs[2], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[3] then
+                player.setJob(OnDutyJobs[3], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[4] then
+                player.setJob(OnDutyJobs[4], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[5] then
+                player.setJob(OnDutyJobs[5], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[6] then
+                player.setJob(OnDutyJobs[6], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[7] then
+                player.setJob(OnDutyJobs[7], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[8] then
+                player.setJob(OnDutyJobs[8], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[9] then
+                player.setJob(OnDutyJobs[9], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            elseif OffDutyJobs[10] then
+                player.setJob(OnDutyJobs[10], grade)
+                VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
+            end
+
+    else
+    VORPcore.NotifyBottomRight(_source,"You do not have the right job",4000)	
+    end
+
+    TriggerClientEvent("lawmen:onduty", _source, true)
+
+end)
+
+RegisterServerEvent("lawmen:synsociety", function(status)
+    local _source = source
+    local player = VORPcore.getUser(_source).getUsedCharacter
+    local job = player.job
+    print(job)
+    exports["syn_society"]:SetPlayerDuty(_source,job,status,nil) 
 end)
 
 RegisterServerEvent("lawmen:gooffdutysv") -- Go off duty event
@@ -100,7 +80,7 @@ AddEventHandler("lawmen:gooffdutysv", function()
     local job = player.job
     local grade = player.jobGrade
     local playername = player.firstname.. ' ' ..player.lastname
-    for k,v in pairs(Marshal_Jobs) do
+    for k,v in pairs(OnDutyJobs) do
         if v == job then
             player.setJob('off'..job, grade)
             local message = playername.. " Went Off Duty as off"..job.. ' ' ..grade
