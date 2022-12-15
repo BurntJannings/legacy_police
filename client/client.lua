@@ -188,7 +188,7 @@ Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
                 PromptSetActiveGroupThisFrame(prompt, item_name)
                     if IsControlJustReleased(0, 0xC7B5340A) then
                         TriggerServerEvent("legacy_police:PlayerJob") -- run client side check before check for distance. no need to run code that is not meant for the client its optimized this way
-                        if CheckTable(Marshal_Jobs,playerJob) then
+                        if CheckTable(OnDutyJobs,playerJob) then
                             inmenu = true
                             CabinetMenu()
                     end
