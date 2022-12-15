@@ -16,6 +16,9 @@ Marshal_Jobs = {
 
 }
 
+Config.synsociety = false -- newline
+
+
 Config.Guncabinets = {
 {x = -279.1195, y = 805.1283, z = 118.4004 }, --Val
 { x = -1814.174, y = -355.3881, z = 163.6477 }, --Straw
