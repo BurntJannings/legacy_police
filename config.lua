@@ -8,7 +8,7 @@ OffDutyJobs = {
 
 }
 
-Marshal_Jobs = {
+OnDutyJobs = {
     'police',
     'marshal',
     'lawmen',
