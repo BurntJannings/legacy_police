@@ -28,31 +28,31 @@ AddEventHandler("lawmen:goondutysv", function(ptable)
             if job == OffDutyJobs[1] then
                 player.setJob(OnDutyJobs[1], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)			
-            elseif OffDutyJobs[2] then
+            elseif job == OffDutyJobs[2] then
                 player.setJob(OnDutyJobs[2], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[3] then
+            elseif job == OffDutyJobs[3] then
                 player.setJob(OnDutyJobs[3], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[4] then
+            elseif job == OffDutyJobs[4] then
                 player.setJob(OnDutyJobs[4], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[5] then
+            elseif job == OffDutyJobs[5] then
                 player.setJob(OnDutyJobs[5], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[6] then
+            elseif job == OffDutyJobs[6] then
                 player.setJob(OnDutyJobs[6], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[7] then
+            elseif job == OffDutyJobs[7] then
                 player.setJob(OnDutyJobs[7], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[8] then
+            elseif job == OffDutyJobs[8] then
                 player.setJob(OnDutyJobs[8], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[9] then
+            elseif job == OffDutyJobs[9] then
                 player.setJob(OnDutyJobs[9], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
-            elseif OffDutyJobs[10] then
+            elseif job == OffDutyJobs[10] then
                 player.setJob(OnDutyJobs[10], grade)
                 VORPcore.NotifyBottomRight(_source,"You are now on Duty",4000)	
             end
@@ -400,15 +400,6 @@ VORP_INV.RegisterUsableItem("handcuffs", function(data)--Handcuffs usable
     VORP_INV.CloseInv(data.source)
     TriggerClientEvent("lawmen:cuffs", data.source)
 end)
-
-function CheckTable(table, element)
-    for k, v in pairs(table) do
-        if v == element then
-            return true
-        end
-    end
-    return false
-end
 
 RegisterServerEvent("lawmen:policenotify")
 AddEventHandler("lawmen:policenotify", function(players, coords)
