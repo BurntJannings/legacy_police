@@ -102,7 +102,7 @@ AddEventHandler('lawmen:FinePlayer', function(player, amount)
     local fine = tonumber(amount)
     print("fine", fine)
 
-    for i,v in pairs(Marshal_Jobs) do
+    for i,v in pairs(OnDutyJobs) do
         if v == pCharacter.job then
             pJob = v
             local Society_Account = pJob
@@ -234,7 +234,7 @@ RegisterServerEvent('lawmen:drag')--Drag Event
 AddEventHandler('lawmen:drag', function(target)
     local _source = source
     local user = VORPcore.getUser(_source).getUsedCharacter
-    for i,v in pairs(Marshal_Jobs) do
+    for i,v in pairs(OnDutyJobs) do
         if user.job == v then
             TriggerClientEvent('lawmen:drag', target, _source)
         else
@@ -407,7 +407,7 @@ AddEventHandler("lawmen:policenotify", function(players, coords)
     local Character = VorpCore.getUser(_source).getUsedCharacter
     local job = Character.job -- player job
 
-        if CheckTable(Marshal_Jobs,job) then -- if job exist in table then pass
+        if CheckTable(OnDutyJobs,job) then -- if job exist in table then pass
 
 				TriggerClientEvent("witness", m, coords)
 
