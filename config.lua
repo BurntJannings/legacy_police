@@ -1,11 +1,25 @@
 Config = {}
 
+--Jail Event for use in other scripts
+--TriggerServerEvent('lawmen:JailPlayer', function(id, time, "the location string")
+--[[
+Jail ID's
+
+Sisika = sk
+Blackwater = bw
+Armadillo = ar
+Tumbleweed = tu
+Strawberry = st
+Valentine = val
+Saint Denis = sd
+Annesburg = an
+]]
+
 OffDutyJobs = {
     'offpolice',
     'offmarshal',
     'offlawmen',
     'offsheriffrhodes',
-
 }
 
 OnDutyJobs = {
@@ -13,11 +27,9 @@ OnDutyJobs = {
     'marshal',
     'lawmen',
     'sheriffrhodes',
-
 }
 
 Config.synsociety = false -- newline
-
 
 Config.Guncabinets = {
 {x = -279.1195, y = 805.1283, z = 118.4004 }, --Val
@@ -48,9 +60,7 @@ Config.ondutycommand = "goonduty" -- Go on duty Command
 Config.offdutycommand = "gooffduty" --Go off duty Command
 Config.openpolicemenu = "menu" -- Open Police Menu Command
 Config.menuname = "Law Menu" -- Menu Name
-Config.badgename = "Law Badge" -- Law Badge
-
-                              
+Config.badgename = "Law Badge" -- Law Badge                          
 Config.Prompt = "Open Cabinet"
 
 Config.RevolverName1 = "Lemat Revolver" -- Revolver Label Name
