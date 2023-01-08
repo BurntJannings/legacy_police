@@ -288,20 +288,20 @@ function openPolicemenu() -- Base Police Menu Logic
 		if (data.current.value == 'star') then 
             if star == false then
 			    if not IsPedMale(ped) then
-                    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(),  0x1FC12C9C, true, true, true)
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(),  0x0929677D, true, true, true)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 else
-                    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), 0xDB4C451D, true, false, true)
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), 0x1FC12C9C, true, false, true)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 end
 		VORPcore.NotifyBottomRight("You have put on your star",4000)		
                 star = true
             else
                 if not IsPedMale(ped) then
-                    Citizen.InvokeNative(0x0D7FFA1B2F69ED82, PlayerPedId(),  0x1FC12C9C, 0, 0)
+                    Citizen.InvokeNative(0x0D7FFA1B2F69ED82, PlayerPedId(),  0x0929677D, 0, 0)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 else
-                    Citizen.InvokeNative(0x0D7FFA1B2F69ED82, PlayerPedId(), 0xDB4C451D, 0, 0)
+                    Citizen.InvokeNative(0x0D7FFA1B2F69ED82, PlayerPedId(), 0x1FC12C9C, 0, 0)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 end
 		VORPcore.NotifyBottomRight("You took your star off",4000)
