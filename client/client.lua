@@ -28,7 +28,7 @@ local prompt2 = GetRandomIntInRange(0, 0xffffff)
 local prompt = GetRandomIntInRange(0, 0xffffff)
 
 CreateThread(function()
-    local str = Config.Prompt
+    local str = _U('opencabinet')
     Open = PromptRegisterBegin()
     PromptSetControlAction(Open, 0xCEFD9220)
     str = CreateVarString(10, 'LITERAL_STRING', str)
@@ -39,7 +39,7 @@ CreateThread(function()
     PromptSetGroup(Open, prompt)
     PromptRegisterEnd(Open)
 
-    local str = "search"
+    local str = _U('search')
     Search = PromptRegisterBegin()
     PromptSetControlAction(Search, 0xC7B5340A)
     str = CreateVarString(10, 'LITERAL_STRING', str)
@@ -190,7 +190,7 @@ Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
             if not isDead then
                 if GetDistanceBetweenCoords(coords, v.x, v.y, v.z, true) < 1.5 and not Inmenu then
 
-                    local item_name = CreateVarString(10, 'LITERAL_STRING', Config.Prompt)
+                    local item_name = CreateVarString(10, 'LITERAL_STRING', _U('opencabinet'))
                     PromptSetActiveGroupThisFrame(prompt, item_name)
 
                     if PromptHasHoldModeCompleted(Open) then
@@ -218,7 +218,7 @@ function CuffPlayer(closestPlayer) -- Prompt and code to access Gun Cabinets
             if not isDead then
                 if IsHandcuffed or hogtied then
                     if not Inmenu then
-                        local item_name = CreateVarString(10, 'LITERAL_STRING', "Search Player")
+                        local item_name = CreateVarString(10, 'LITERAL_STRING', _U('searchcitizen'))
                         PromptSetActiveGroupThisFrame(prompt2, item_name)
                     end
                 end
