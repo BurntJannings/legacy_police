@@ -213,12 +213,11 @@ function CuffPlayer(closestPlayer) -- Prompt and code to access Gun Cabinets
         local tgtcoords = GetEntityCoords(GetPlayerPed(closestPlayer))
         local distance = #(playercoords - tgtcoords)
         Wait(0)
-        local hogtied = Citizen.InvokeNative(0x3AA24CCC0D451379, closestPlayer)
         if distance <= 3.0 then
             if not isDead then
-                if IsHandcuffed or hogtied then
+                if IsHandcuffed then
                     if not Inmenu then
-                        local item_name = CreateVarString(10, 'LITERAL_STRING', _U('searchcitizen'))
+                        local item_name = CreateVarString(10, 'LITERAL_STRING', _U('searchplayer'))
                         PromptSetActiveGroupThisFrame(prompt2, item_name)
                     end
                 end
@@ -235,10 +234,12 @@ function CuffPlayer(closestPlayer) -- Prompt and code to access Gun Cabinets
 end
 
 RegisterNetEvent('lawmen:StartSearchItems', function()
-    local closestPlayer = GetClosestPlayer()
+    local closestPlayer, closestDistance = GetClosestPlayer()
     local searchid = GetPlayerServerId(closestPlayer)
-    TriggerServerEvent("lawmen:ReloadItemInventory", searchid)
-    TriggerEvent("vorp_inventory:OpenstealInventory", "Search", searchid)
+    if closestPlayer ~= -1 and closestDistance <= 3.0 then
+        TriggerServerEvent("lawmen:ReloadItemInventory", searchid)
+        TriggerEvent("vorp_inventory:OpenstealInventory", "Search", searchid)
+    end
 end)
 
 RegisterNetEvent('lawmen:GetSearchItems')
@@ -247,10 +248,12 @@ AddEventHandler('lawmen:GetSearchItems', function(obj)
 end)
 
 RegisterNetEvent('lawmen:StartSearchWeapons', function()
-    local closestPlayer = GetClosestPlayer()
+    local closestPlayer, closestDistance = GetClosestPlayer()
     local searchid = GetPlayerServerId(closestPlayer)
-    TriggerServerEvent("lawmen:ReloadWeaponInventory", searchid)
-    TriggerEvent("vorp_inventory:OpenstealInventory", "Search", searchid)
+    if closestPlayer ~= -1 and closestDistance <= 3.0 then
+        TriggerServerEvent("lawmen:ReloadWeaponInventory", searchid)
+        TriggerEvent("vorp_inventory:OpenstealInventory", "Search", searchid)
+    end
 end)
 
 RegisterNetEvent('lawmen:GetSearchWeapons')
@@ -858,6 +861,7 @@ function SearchMenu(takenmoney) -- Set chore menu logic
         end,
         function(data, menu)
             menu.close()
+            Inmenu = false
         end)
 end
 
