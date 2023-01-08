@@ -471,17 +471,18 @@ AddEventHandler("lawmen:policenotify", function(coords)
     end
 end)
 
-RegisterCommand("fine", function(source, args, rawCommand)
+RegisterCommand(Config.finecommand, function(source, args, rawCommand)
     local _source = source -- player source
     local Character = VORPcore.getUser(_source).getUsedCharacter
+    local Job = Character.job
     local target = args[1]
     local fine = args[2]
-    if Character.group == "admin" then
+    if Character.group == "admin" or CheckTable(OnDutyJobs, job) then
         TriggerEvent("lawmen:FinePlayer", tonumber(target), tonumber(fine))
     end
 end)
 
-RegisterCommand("jail", function(source, args, rawCommand)
+RegisterCommand(Config.jailcommand, function(source, args, rawCommand)
     local _source = source -- player source
     local Character = VORPcore.getUser(_source).getUsedCharacter
     local target = args[1]
@@ -490,19 +491,19 @@ RegisterCommand("jail", function(source, args, rawCommand)
     if jailid == nil then
         jailid = 'sk'
     end
-    if Character.group == "admin" then
+    if Character.group == "admin" or CheckTable(OnDutyJobs, job) then
         TriggerEvent('lawmen:JailPlayer', tonumber(target), tonumber(jailtime), jailid)
     end
 end)
 
-RegisterCommand('unjail', function(source, args, rawCommand)
+RegisterCommand(Config.unjailcommand, function(source, args, rawCommand)
     local _source = source -- player source
 
     local Character = VORPcore.getUser(_source).getUsedCharacter
     local target = tonumber(args[1])
     if target then
         if VORPcore.getUser(target) then
-            if Character.group == "admin" then
+            if Character.group == "admin" or CheckTable(OnDutyJobs, job) then
                 TriggerEvent("lawmen:unjailed", target)
             end
         end
@@ -530,6 +531,13 @@ RegisterServerEvent('lawmen:SearchPlayersItems')
 AddEventHandler('lawmen:SearchPlayersItems', function(obj, steal_source)
     local _steal_source = steal_source
     local _source = source
+
+    local target = VORPcore.getUser(_steal_source).getUsedCharacter
+    local user = VORPcore.getUser(_source).getUsedCharacter
+    local username = user.firstname .. ' ' .. target.lastname
+    local Job = user.job
+    local targetname = target.firstname .. ' ' .. target.lastname
+
     local decode_obj = json.decode(obj)
     if decode_obj.type == 'item_inventory' or
         decode_obj.type == 'item_standard' and tonumber(decode_obj.number) > 0 and
@@ -540,16 +548,37 @@ AddEventHandler('lawmen:SearchPlayersItems', function(obj, steal_source)
             VORPInv.addItem(_source, decode_obj.item.name, decode_obj.number, decode_obj.item.metadata)
             Wait(100)
             TriggerEvent('lawmen:ReloadItemInventory', _steal_source, _source)
+
+            if Config.UseWebhook then
+                VORPcore.AddWebhook(Config.WebhookInfo.SearchTitle, Config.WebhookInfo.SearchWebhook,
+                    Job ..
+                    " " ..
+                    username .. _U('took') .. decode_obj.number .. _U('of') .. decode_obj.name .. _U('from') ..
+                    targetname,
+                    Config.WebhookInfo.SearchColor,
+                    Config.WebhookInfo.SearchName, Config.WebhookInfo.SearchLogo, Config.WebhookInfo.SearchFooterLogo,
+                    Config.WebhookInfo.SearchAvatar)
+            end
+
         else
             VORPcore.NotifyRightTip(_source, _U('outofroom'), 4000)
         end
+
     end
 end)
+
 
 RegisterServerEvent('lawmen:SearchPlayersWeapons')
 AddEventHandler('lawmen:SearchPlayersWeapons', function(obj, steal_source)
     local _steal_source = steal_source
     local _source = source
+
+    local target = VORPcore.getUser(_steal_source).getUsedCharacter
+    local user = VORPcore.getUser(_source).getUsedCharacter
+    local username = user.firstname .. ' ' .. target.lastname
+    local Job = user.job
+    local targetname = target.firstname .. ' ' .. target.lastname
+
     local decode_obj = json.decode(obj)
     if decode_obj.type == 'item_weapon' then
         VORPInv.canCarryWeapons(_source, 1, function(cb)
@@ -559,6 +588,19 @@ AddEventHandler('lawmen:SearchPlayersWeapons', function(obj, steal_source)
                 VORPInv.giveWeapon(_source, decode_obj.item.id, 0)
                 Wait(100)
                 TriggerEvent('lawmen:ReloadWeaponInventory', _steal_source, _source)
+
+                if Config.UseWebhook then
+                    VORPcore.AddWebhook(Config.WebhookInfo.SearchTitle, Config.WebhookInfo.SearchWebhook,
+                        Job ..
+                        " " ..
+                        username ..
+                        _U('took') .. decode_obj.number .. _U('of') .. decode_obj.name .. _U('from') .. targetname,
+                        Config.WebhookInfo.SearchColor,
+                        Config.WebhookInfo.SearchName, Config.WebhookInfo.SearchLogo, Config.WebhookInfo.SearchFooterLogo
+                        ,
+                        Config.WebhookInfo.SearchAvatar)
+                end
+
             else
                 VORPcore.NotifyRightTip(_source, _U('outofroom'), 4000)
             end
