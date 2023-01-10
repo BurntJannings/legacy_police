@@ -291,7 +291,7 @@ function openPolicemenu() -- Base Police Menu Logic
                     Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(),  0x0929677D, true, true, true)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 else
-                    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), 0x1FC12C9C, true, false, true)
+                    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), 0x1FC12C9C, true, true, true)
                     Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false)
                 end
 		VORPcore.NotifyBottomRight("You have put on your star",4000)		
