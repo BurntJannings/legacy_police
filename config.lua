@@ -15,7 +15,7 @@ Annesburg = an
 ]]
 
 Config.synsociety = false -- If you use syn_society and want compatability
-Config.CheckHorse = false
+Config.CheckHorse = false -- If you want to check horse ID's
 Config.Locale = 'en'
 
 OffDutyJobs = {
@@ -50,7 +50,7 @@ Config.CommunityServiceSettings = {
      leftserviceamount = 2, -- minutes to jail player if the escape service
 }
 
-Config.UseWebhook = true
+Config.UseWebhook = false
 Config.WebhookInfo = {
      JailTitle = 'Jail Log',
      JailWebhook = '',
