@@ -69,7 +69,6 @@ Citizen.CreateThread(function() -- In jail chores to reduce time in jail
                 Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U('jailchoreblip'))
                 local coords = GetEntityCoords(PlayerPedId())
                 local currentCheck = Vdist2(coords.x, coords.y, coords.z, v.x, v.y, v.z)
-                print(currentCheck)
                 if currentCheck < 5 then
                     DrawTxt(_U('presstodotask'), 0.42, 0.90, 0.4, 0.4, true, 255, 255, 255, 255, false)
                     if IsControlJustReleased(0, 0xCEFD9220) and doingchore == false then
@@ -252,7 +251,6 @@ end)
 function PutInOutVehicle()
     local closestPlayer, closestDistance = GetClosestPlayer()
     local iscuffed = Citizen.InvokeNative(0x74E559B3BC910685, closestPlayer)
-    print(iscuffed)
     if closestPlayer ~= -1 and closestDistance <= 3.0 then
         TriggerServerEvent('lawmen:GetPlayerWagonID', GetPlayerServerId(closestPlayer))
         if not InWagon then
