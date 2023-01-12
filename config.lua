@@ -53,7 +53,7 @@ Config.CommunityServiceSettings = {
 Config.UseWebhook = true
 Config.WebhookInfo = {
      JailTitle = 'Jail Log',
-     JailWebhook = 'https://discord.com/api/webhooks/1000098262159737025/6oMmd_2HJQIvx3a7qqNyWSJHu_CWTzFmJVJeAXaIq2aNMwTkqd1Hwpuh3VE-_hUb9ODl',
+     JailWebhook = '',
      --JailColor = '',
      --JailName = '',
      --JailLogo = '',
@@ -61,7 +61,7 @@ Config.WebhookInfo = {
      --JailAvatar = '',
 
      FineTitle = 'Fine',
-     FineWebhook = 'https://discord.com/api/webhooks/1000098262159737025/6oMmd_2HJQIvx3a7qqNyWSJHu_CWTzFmJVJeAXaIq2aNMwTkqd1Hwpuh3VE-_hUb9ODl',
+     FineWebhook = '',
      --JailColor = '',
      --JailName = '',
      --JailLogo = '',
@@ -69,7 +69,7 @@ Config.WebhookInfo = {
      --JailAvatar = '',
 
      ServiceTitle = 'Service',
-     ServiceWebhook = 'https://discord.com/api/webhooks/1000098262159737025/6oMmd_2HJQIvx3a7qqNyWSJHu_CWTzFmJVJeAXaIq2aNMwTkqd1Hwpuh3VE-_hUb9ODl',
+     ServiceWebhook = '',
      --JailColor = '',
      --JailName = '',
      --JailLogo = '',
@@ -77,7 +77,7 @@ Config.WebhookInfo = {
      --JailAvatar = '',
 
      SearchedTitle = 'Searched Player',
-     SearchedWebhook = 'https://discord.com/api/webhooks/1028414692814757920/6dU77U82hQhM2kSj3_Kejj1vCYyHSqkm6n-rVuuX_TLObsIK7BxfKS9YC6j5BLP4WiqR',
+     SearchedWebhook = '',
      --SearchedColor = '',
      --SearchedName = '',
      --SearchedLogo = '',
