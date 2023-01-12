@@ -70,7 +70,6 @@ end)
 
 RegisterServerEvent("lawmen:gooffdutysv") -- Go off duty event
 AddEventHandler("lawmen:gooffdutysv", function()
-    print('offduty is triggered')
     local _source = source
     local player = VORPcore.getUser(_source).getUsedCharacter
     local job = player.job
