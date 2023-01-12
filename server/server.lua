@@ -59,7 +59,7 @@ AddEventHandler("lawmen:goondutysv", function(ptable)
     else
         VORPcore.NotifyBottomRight(_source, _U('nottherightjob'), 4000)
     end
-end)
+end) 
 
 RegisterServerEvent("lawmen:synsociety", function(status)
     local _source = source
