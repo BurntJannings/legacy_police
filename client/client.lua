@@ -83,32 +83,38 @@ Citizen.CreateThread(function() -- In jail chores to reduce time in jail
                 end
             end
 
-            for k, v in pairs(Config.Jails) do
-                if JailID == "sk" then
-                    local Jailedcoords = GetEntityCoords(PlayerPedId())
-                    local currentCheck = GetDistanceBetweenCoords(Jailedcoords.x, Jailedcoords.y, Jailedcoords.z,
-                        Config.Jails.sisika.entrance.x, Config.Jails.sisika.entrance.y, Config.Jails.sisika.entrance.z,
-                        true)
-                    if currentCheck > 420 then
-                        TriggerEvent("lawmen:breakout")
-                    end
-                else
-                    local Jailedcoords = GetEntityCoords(PlayerPedId())
-                    while Jailed do
-                        Wait(0)
-                        local othercoords = GetEntityCoords(PlayerPedId())
-                        local currentCheck2 = GetDistanceBetweenCoords(Jailedcoords.x, Jailedcoords.y, Jailedcoords.z,
-                            othercoords.x, othercoords.y, othercoords.z, true)
-                        if currentCheck2 > 10 then
-                            TriggerEvent("lawmen:breakout")
-                        end
-                    end
-                end
-            end
-
         end
     end
 end)
+
+Citizen.CreateThread(function() -- In jail chores to reduce time in jail
+    while true do
+        Wait(0)
+        local playercoords = GetEntityCoords(PlayerPedId())
+        while Jailed do
+            Wait(0)
+            if JailID == "sk" then
+                local Jailedcoords = GetEntityCoords(PlayerPedId())
+                local currentCheck = GetDistanceBetweenCoords(Jailedcoords.x, Jailedcoords.y, Jailedcoords.z,
+                    Config.Jails.sisika.entrance.x, Config.Jails.sisika.entrance.y, Config.Jails.sisika.entrance.z,
+                    true)
+                print(currentCheck)
+                if currentCheck > 420 then
+                    TriggerEvent("lawmen:breakout")
+                end
+            else
+                local Jailedcoords = GetEntityCoords(PlayerPedId())
+                local currentCheck2 = GetDistanceBetweenCoords(playercoords.x, playercoords.y, playercoords.z,
+                    Jailedcoords.x, Jailedcoords.y, Jailedcoords.z, true)
+                print(currentCheck2)
+                if currentCheck2 > 15 then
+                    TriggerEvent("lawmen:breakout")
+                end
+            end
+        end
+    end
+end)
+
 
 Citizen.CreateThread(function() -- Community Service Logic, including animations minigame difficulty and more
     while true do
@@ -251,6 +257,7 @@ end)
 function PutInOutVehicle()
     local closestPlayer, closestDistance = GetClosestPlayer()
     local iscuffed = Citizen.InvokeNative(0x74E559B3BC910685, closestPlayer)
+    print(iscuffed)
     if closestPlayer ~= -1 and closestDistance <= 3.0 then
         TriggerServerEvent('lawmen:GetPlayerWagonID', GetPlayerServerId(closestPlayer))
         if not InWagon then
@@ -563,6 +570,10 @@ function OpenJailMenu() -- Jail menu logic
                 end)
 
             elseif (data.current.value == 'jail') then
+                Wait(500)
+                if JailID == nil then
+                    JailID = 'sk'
+                end
                 TriggerServerEvent('lawmen:JailPlayer', tonumber(playerid), tonumber(timeinjail), JailID)
 
             elseif (data.current.value == 'auto') then
@@ -1111,6 +1122,7 @@ AddEventHandler("lawmen:JailPlayer", function(time, Location)
     local ped = PlayerPedId()
     local time_minutes = math.floor(time / 60)
     local JailID = Location
+    print(Location)
     Serviced = false
     if not Jailed then
         if Autotele then
@@ -1205,7 +1217,7 @@ AddEventHandler("lawmen:wear_prison", function()
 end)
 
 RegisterNetEvent("lawmen:UnjailPlayer") -- Unjail player event
-AddEventHandler("lawmen:UnjailPlayer", function()
+AddEventHandler("lawmen:UnjailPlayer", function(jaillocation)
     local local_ped = PlayerPedId()
     local local_player = PlayerId()
     local JailID = jaillocation
@@ -1475,8 +1487,9 @@ Citizen.CreateThread(function() -- Timer for leaving community service logic, wh
 end)
 
 RegisterNetEvent("lawmen:witness", function(coords)
+    print(coords)
     VORPcore.NotifyLeft(_U('crimereported'), _U('jailbreakalert'), "generic_textures", "star", 6000)
-    local blip = Citizen.InvokeNative(0x45f13b7e0a15c880, -1282792512, coords.x, coords.y, coords.z, 20.0)
+    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 20.0)
     Wait(60000) --Time till notify blips dispears, 1 min
     RemoveBlip(blip)
 end)
