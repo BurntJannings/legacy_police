@@ -246,11 +246,7 @@ end
 Citizen.CreateThread(function()
     while true do
         Wait(0)
-        if InWagon then
             SetRelationshipBetweenGroups(1, `PLAYER`, `PLAYER`)
-        else
-            SetRelationshipBetweenGroups(5, `PLAYER`, `PLAYER`)
-        end
     end
 end)
 
