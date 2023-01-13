@@ -581,7 +581,7 @@ function OpenJailMenu() -- Jail menu logic
             elseif (data.current.value == 'loc') then
                 OpenSubJailMenu()
             elseif (data.current.value == 'unjail') then
-                TriggerServerEvent('lawmen:unjail', playerid, JailID)
+                TriggerServerEvent('lawmen:unjailed', playerid, JailID)
             end
         end,
         function(data, menu)
@@ -1110,7 +1110,7 @@ RegisterNetEvent("lawmen:JailPlayer") -- Jailing player event
 AddEventHandler("lawmen:JailPlayer", function(time, Location)
     local ped = PlayerPedId()
     local time_minutes = math.floor(time / 60)
-    jaillocation = Location
+    local JailID = Location
     Serviced = false
     if not Jailed then
         if Autotele then
