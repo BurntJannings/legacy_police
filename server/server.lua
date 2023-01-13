@@ -59,7 +59,7 @@ AddEventHandler("lawmen:goondutysv", function(ptable)
     else
         VORPcore.NotifyBottomRight(_source, _U('nottherightjob'), 4000)
     end
-end) 
+end)
 
 RegisterServerEvent("lawmen:synsociety", function(status)
     local _source = source
@@ -70,6 +70,7 @@ end)
 
 RegisterServerEvent("lawmen:gooffdutysv") -- Go off duty event
 AddEventHandler("lawmen:gooffdutysv", function()
+    print('offduty is triggered')
     local _source = source
     local player = VORPcore.getUser(_source).getUsedCharacter
     local job = player.job
@@ -189,7 +190,7 @@ AddEventHandler('lawmen:CommunityService', function(player, chore, amount)
 end)
 
 RegisterServerEvent("lawmen:finishedjail") --Unjail event
-AddEventHandler("lawmen:finishedjail", function(target_id, loc)
+AddEventHandler("lawmen:finishedjail", function(target_id)
     local _source = source
     local target = VORPcore.getUser(target_id).getUsedCharacter
     local steam_id = target.identifier
@@ -462,10 +463,12 @@ end
 
 RegisterServerEvent("lawmen:policenotify")
 AddEventHandler("lawmen:policenotify", function(coords)
+    print(coords)
     for z, m in ipairs(GetPlayers()) do
         local User = VORPcore.getUser(m)
         local used = User.getUsedCharacter
         if CheckTable(OnDutyJobs, used.job) then -- if job exist in table then pass
+            Wait(200)
             TriggerClientEvent("lawmen:witness", m, coords)
         end
     end
