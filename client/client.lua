@@ -999,11 +999,13 @@ AddEventHandler("lawmen:onduty", function(duty)
         PoliceOnDuty = false
         if Config.synsociety then
             TriggerServerEvent('lawmen:synsociety', false)
+            ExecuteCommand('refreshjob')
         end
     else
         PoliceOnDuty = true
         if Config.synsociety then
             TriggerServerEvent('lawmen:synsociety', true)
+            ExecuteCommand('refreshjob')
         end
     end
 end)
