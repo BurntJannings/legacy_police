@@ -249,8 +249,9 @@ Citizen.CreateThread(function()
         local coords = GetEntityCoords(ped)
         local closestWagon = GetClosestVehicle(coords)
         local vehicle = IsPedInVehicle(ped, closestWagon, 0)
+        local onmount = IsPedOnMount(ped)
         Wait(0)
-        if vehicle then 
+        if vehicle or onmount then 
             SetRelationshipBetweenGroups(1, `PLAYER`, `PLAYER`)
         else
             SetRelationshipBetweenGroups(3, `PLAYER`, `PLAYER`)
