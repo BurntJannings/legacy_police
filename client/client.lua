@@ -245,8 +245,16 @@ end
 
 Citizen.CreateThread(function()
     while true do
+        local ped = PlayerPedId()
+        local coords = GetEntityCoords(ped)
+        local closestWagon = GetClosestVehicle(coords)
+        local vehicle = IsPedInVehicle(ped, closestWagon, 0)
         Wait(0)
+        if vehicle then 
             SetRelationshipBetweenGroups(1, `PLAYER`, `PLAYER`)
+        else
+            SetRelationshipBetweenGroups(3, `PLAYER`, `PLAYER`)
+        end
     end
 end)
 
