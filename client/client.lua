@@ -270,10 +270,11 @@ AddEventHandler('lawmen:PlayerInWagon', function()
     local coords = GetEntityCoords(ped)
     local closestWagon = GetClosestVehicle(coords)
     local vehicle = IsPedInVehicle(ped, closestWagon, 0)
+        local seat = math.random(2,6)
     if ped ~= nil then
         if not vehicle then
 
-            SetPedIntoVehicle(ped, closestWagon, -2)
+            SetPedIntoVehicle(ped, closestWagon, seat)
             Wait(500)
             InWagon = true
         else
