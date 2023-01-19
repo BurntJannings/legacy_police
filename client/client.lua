@@ -245,16 +245,9 @@ end
 
 Citizen.CreateThread(function()
     while true do
-        local ped = PlayerPedId()
-        local coords = GetEntityCoords(ped)
-        local closestWagon = GetClosestVehicle(coords)
-        local vehicle = IsPedInVehicle(ped, closestWagon, 0)
-        local onmount = IsPedOnMount(ped)
         Wait(0)
-        if vehicle or onmount then 
+        if InWagon then 
             SetRelationshipBetweenGroups(1, `PLAYER`, `PLAYER`)
-        else
-            SetRelationshipBetweenGroups(3, `PLAYER`, `PLAYER`)
         end
     end
 end)
@@ -265,11 +258,6 @@ function PutInOutVehicle()
     print(iscuffed)
     if closestPlayer ~= -1 and closestDistance <= 3.0 then
         TriggerServerEvent('lawmen:GetPlayerWagonID', GetPlayerServerId(closestPlayer))
-        if not InWagon then
-            InWagon = true
-        else
-            InWagon = false
-        end
     else
         VORPcore.NotifyBottomRight(_U('notcloseenough'), 4000)
         return
@@ -1128,7 +1116,7 @@ RegisterNetEvent("lawmen:JailPlayer") -- Jailing player event
 AddEventHandler("lawmen:JailPlayer", function(time, Location)
     local ped = PlayerPedId()
     local time_minutes = math.floor(time / 60)
-    local JailID = Location
+    JailID = Location
     print(Location)
     Serviced = false
     if not Jailed then
@@ -1227,7 +1215,7 @@ RegisterNetEvent("lawmen:UnjailPlayer") -- Unjail player event
 AddEventHandler("lawmen:UnjailPlayer", function(jaillocation)
     local local_ped = PlayerPedId()
     local local_player = PlayerId()
-    local JailID = jaillocation
+    JailID = jaillocation
     ExecuteCommand('rc')
     VORPcore.NotifyBottomRight(_U('released'), 4000)
     Jailed = false
