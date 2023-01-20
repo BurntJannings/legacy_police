@@ -507,7 +507,7 @@ RegisterCommand(Config.unjailcommand, function(source, args, rawCommand)
     if target then
         if VORPcore.getUser(target) then
             if Character.group == "admin" or CheckTable(OnDutyJobs, job) then
-                TriggerEvent("lawmen:unjailed", target)
+                TriggerEvent("lawmen:unjailed", tonumber(target))
             end
         end
     end
