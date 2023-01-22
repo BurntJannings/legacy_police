@@ -1222,6 +1222,7 @@ AddEventHandler("lawmen:UnjailPlayer", function(jaillocation)
     Jailed = false
     Jail_time = 0
     if Autotele then
+            Wait(1)
         if JailID == "sk" then
             SetEntityCoords(local_ped, Config.Jails.sisika.exit.x, Config.Jails.sisika.exit.y, Config.Jails.sisika.exit.z)
         elseif JailID == "bw" then
