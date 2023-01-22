@@ -1472,7 +1472,7 @@ Citizen.CreateThread(function() -- Timer for leaving community service logic, wh
                 Brokedistance = false
                 Serviced = false
                 Autotele = true
-                Location = "sk"
+                JailID = "sk"
                 local player_server_id = GetPlayerServerId(PlayerId())
                 TriggerServerEvent('lawmen:JailPlayer', tonumber(player_server_id),
                     tonumber(Config.CommunityServiceSettings.leftserviceamount), JailID)
