@@ -98,7 +98,6 @@ Citizen.CreateThread(function() -- In jail chores to reduce time in jail
                 local currentCheck = GetDistanceBetweenCoords(Jailedcoords.x, Jailedcoords.y, Jailedcoords.z,
                     Config.Jails.sisika.entrance.x, Config.Jails.sisika.entrance.y, Config.Jails.sisika.entrance.z,
                     true)
-                print(currentCheck)
                 if currentCheck > 420 then
                     TriggerEvent("lawmen:breakout")
                 end
@@ -106,7 +105,6 @@ Citizen.CreateThread(function() -- In jail chores to reduce time in jail
                 local Jailedcoords = GetEntityCoords(PlayerPedId())
                 local currentCheck2 = GetDistanceBetweenCoords(playercoords.x, playercoords.y, playercoords.z,
                     Jailedcoords.x, Jailedcoords.y, Jailedcoords.z, true)
-                print(currentCheck2)
                 if currentCheck2 > 15 then
                     TriggerEvent("lawmen:breakout")
                 end
