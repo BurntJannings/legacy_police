@@ -2,7 +2,7 @@ local IsHandcuffed = false
 local playerJob
 local JailID
 local Autotele = true
-local Choreamount = _U('none')
+Choreamount = _U('none')
 local currentCheck
 local jaillocation
 local Jailed = false
