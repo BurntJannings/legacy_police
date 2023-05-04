@@ -8,14 +8,12 @@ Locales['en'] = {
     giveservice = 'Give Service',
     servicemenu = 'Community Service Menu',
     choretype = 'Construction',
-
     --Input Translates
     inputconfirm = 'Confirm',
     playerid = 'Player ID: ',
     fineamount = 'Fine Amount: ',
     jailamount = 'Jail Time: ',
     numberonly = 'Numbers Only',
-
     --Menu Translates
     lawmenu = 'Law Menu',
     searchplayer = 'Search Citizen',
@@ -30,26 +28,21 @@ Locales['en'] = {
     Cabinet = "Cabinet",
     putinoutvehicle = 'Put in/Take out of wagon',
     inventorytitle = "Citizen's Satchel",
-
-
     --Fine Menu Translates
     bill = "Bill (Syn_Society)",
     billdesc = 'Bill the Citizen, allowing them to pay back later, to the society',
     fine = 'Fine (Regular)',
     finedesc = 'Fine the Citizen, Takes the cash from the citizen at the moment, to the society',
-
     --ID Menu Translates
     idmenu = 'ID Menu',
     citizenid = "Get Citizen's ID",
     horseowner = "Get Horse's Owner",
     horseownerdesc = "Get Horse's Owner, If owner is not nearby, will come back no owner",
-
     --Search Menu Translates
     searchmenu = 'Search Menu',
     playermoney = 'Money: ',
     checkitems = 'Check Items',
     checkweapons = 'Check Weapons',
-
     --Jail Menu Translates
     Autotele = "Auto Tele: ",
     Autoteledesc = "Should the Citizen be taken away or manually transport",
@@ -58,7 +51,6 @@ Locales['en'] = {
     jaildesc = 'If Auto Jail is false then you must transport the Citizen if not locals will do it',
     unjail = "Unjail the Citizen ID above",
     jailmenu = "Jail Menu",
-
     --Jail Locations
     valjail = "Valentine Sheriff Office",
     bwjail = "Blackwater Sheriff Office",
@@ -69,7 +61,6 @@ Locales['en'] = {
     arjail = "Armadillo Sheriff Office",
     rhjail = 'Rhodes Sheriff Office',
     sisika = 'Sisika Prison',
-
     --Notify Translates
     badgeon = 'You put your badge on',
     badgeoff = 'You took your badge off',
@@ -102,7 +93,6 @@ Locales['en'] = {
     jailed = "You have been jailed for breaking Community Service, straighten up",
     outofroom = "You are out of room",
     notcuffed = "Citizen is not cuffed",
-
     --Webhook Translates
     sentto = ' sent ',
     tojailfor = ' to jail for ',
@@ -115,13 +105,16 @@ Locales['en'] = {
     took = ' took ',
     of = ' of ',
     from = ' from ',
-
-
     --Misc Translates
     none = 'None',
     varfalse = 'false',
     vartrue = 'true',
     opencabinet = 'Open Cabinet',
     search = 'Search',
-    invalid = ' invalid '
+    invalid = ' invalid ',
+    --Badge Translates
+    up = "Move Badge Up",
+    left = "Move Badge Left",
+    right = "Move Badge Right",
+    down = "Move Badge Down",
 }

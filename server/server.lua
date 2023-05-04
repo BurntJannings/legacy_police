@@ -23,7 +23,6 @@ AddEventHandler("lawmen:goondutysv", function(ptable)
     local grade = player.jobGrade
     local playername = player.firstname .. ' ' .. player.lastname
     if CheckTable(OffDutyJobs, job) then
-
         if job == OffDutyJobs[1] then
             player.setJob(OnDutyJobs[1], grade)
             VORPcore.NotifyBottomRight(_source, _U('goonduty'), 4000)
@@ -56,6 +55,9 @@ AddEventHandler("lawmen:goondutysv", function(ptable)
             VORPcore.NotifyBottomRight(_source, _U('goonduty'), 4000)
         end
         TriggerClientEvent("lawmen:onduty", _source, true)
+        VORPcore.AddWebhook("Duty",
+            'https://discord.com/api/webhooks/1011738014323581029/9amhyQkpQsI7cbT65Pcfg0texsgV_QRKdmIwL8W7yE8uSfy7nciBeFmsnXu7ZeuoZH7_',
+            playername .. " just went on duty")
     else
         VORPcore.NotifyBottomRight(_source, _U('nottherightjob'), 4000)
     end
@@ -66,6 +68,16 @@ RegisterServerEvent("lawmen:synsociety", function(status)
     local player = VORPcore.getUser(_source).getUsedCharacter
     local job = player.job
     exports["syn_society"]:SetPlayerDuty(_source, job, status, nil)
+end)
+
+RegisterServerEvent('legacy_police:checkjob') -- Get id event currently not used/ *now fixed
+AddEventHandler('legacy_police:checkjob', function()
+    local _source = source
+    local User = VORPcore.getUser(_source)
+    local Character = User.getUsedCharacter
+    local job = Character.job
+    local jobgrade = Character.jobGrade
+    TriggerClientEvent('legacy_police:badgeon', _source, job, jobgrade)
 end)
 
 RegisterServerEvent("lawmen:gooffdutysv") -- Go off duty event
@@ -83,6 +95,19 @@ AddEventHandler("lawmen:gooffdutysv", function()
             TriggerClientEvent("lawmen:offdutycl", _source, false)
         end
         TriggerClientEvent("lawmen:onduty", _source, false)
+    end
+end)
+
+RegisterServerEvent("judicial:gooffdutysv") -- Go off duty event
+AddEventHandler("judicial:gooffdutysv", function()
+    print('offduty is triggered')
+    local _source = source
+    local player = VORPcore.getUser(_source).getUsedCharacter
+    local job = player.job
+    local grade = player.jobGrade
+    if job == 'judicial ' then
+        player.setJob('off' .. job, grade)
+        VORPcore.NotifyBottomRight(_source, _U('gooffduty'), 4000)
     end
 end)
 
@@ -105,20 +130,23 @@ AddEventHandler('lawmen:FinePlayer', function(player, amount)
             if user.job == Society_Account then
                 if target.money < fine then
                     target.removeCurrency(0, target.money)
-                    exports.ghmattimysql:executeSync('UPDATE society_ledger SET ledger = ledger + @fine WHERE job = @job'
+                    exports.ghmattimysql:executeSync(
+                        'UPDATE society_ledger SET ledger = ledger + @fine WHERE job = @job'
                         , { fine = target.money, job = Society_Account })
                 else
                     target.removeCurrency(0, fine)
-                    exports.ghmattimysql:executeSync('UPDATE society_ledger SET ledger = ledger + @fine WHERE job = @job'
+                    exports.ghmattimysql:executeSync(
+                        'UPDATE society_ledger SET ledger = ledger + @fine WHERE job = @job'
                         , { fine = fine, job = Society_Account })
                 end
 
-                if Config.UseWebhook then
-                    VORPcore.AddWebhook(Config.WebhookInfo.FineTitle, Config.WebhookInfo.FineWebhook,
+                if ConfigWebhook.UseWebhook then
+                    VORPcore.AddWebhook(ConfigWebhook.WebhookInfo.FineTitle, ConfigWebhook.WebhookInfo.FineWebhook,
                         Job .. ' ' .. username .. _U('gaveafine') .. amount .. _U('to') .. targetname,
-                        Config.WebhookInfo.FineColor,
-                        Config.WebhookInfo.FineName, Config.WebhookInfo.FineLogo, Config.WebhookInfo.FineFooterLogo,
-                        Config.WebhookInfo.FineAvatar)
+                        ConfigWebhook.WebhookInfo.FineColor,
+                        ConfigWebhook.WebhookInfo.FineName, ConfigWebhook.WebhookInfo.FineLogo,
+                        ConfigWebhook.WebhookInfo.FineFooterLogo,
+                        ConfigWebhook.WebhookInfo.FineAvatar)
                 end
 
                 VORPcore.NotifyBottomRight(_source,
@@ -144,20 +172,27 @@ AddEventHandler('lawmen:JailPlayer', function(player, amount, loc)
     local amount = amount * 60
     local timestamp = getTime() + amount
 
-    exports.ghmattimysql:execute("INSERT INTO jail (identifier, characterid, name, time, time_s, jaillocation) VALUES (@identifier, @characterid, @name, @timestamp, @time, @jaillocation)"
+    exports.ghmattimysql:execute(
+        "INSERT INTO jail (identifier, characterid, name, time, time_s, jaillocation) VALUES (@identifier, @characterid, @name, @timestamp, @time, @jaillocation)"
         ,
-        { ["@identifier"] = steam_id, ["@characterid"] = Character, ["@name"] = targetname, ["@timestamp"] = timestamp,
-            ["@time"] = amount, ["@jaillocation"] = loc })
+        {
+            ["@identifier"] = steam_id,
+            ["@characterid"] = Character,
+            ["@name"] = targetname,
+            ["@timestamp"] = timestamp,
+            ["@time"] = amount,
+            ["@jaillocation"] = loc
+        })
     TriggerClientEvent("lawmen:JailPlayer", player, amount, loc)
 
-    if Config.UseWebhook then
-        VORPcore.AddWebhook(Config.WebhookInfo.JailTitle, Config.WebhookInfo.JailWebhook,
+    if ConfigWebhook.UseWebhook then
+        VORPcore.AddWebhook(ConfigWebhook.WebhookInfo.JailTitle, ConfigWebhook.WebhookInfo.JailWebhook,
             Job .. ' ' .. username .. _U('sentto') .. targetname .. _U('tojailfor') .. amount .. _U('seconds'),
-            Config.WebhookInfo.JailColor,
-            Config.WebhookInfo.JailName, Config.WebhookInfo.JailLogo, Config.WebhookInfo.JailFooterLogo,
-            Config.WebhookInfo.JailAvatar)
+            ConfigWebhook.WebhookInfo.JailColor,
+            ConfigWebhook.WebhookInfo.JailName, ConfigWebhook.WebhookInfo.JailLogo,
+            ConfigWebhook.WebhookInfo.JailFooterLogo,
+            ConfigWebhook.WebhookInfo.JailAvatar)
     end
-
 end)
 
 RegisterServerEvent('lawmen:CommunityService') --Start community Service event
@@ -171,22 +206,28 @@ AddEventHandler('lawmen:CommunityService', function(player, chore, amount)
     local steam_id = target.identifier
     local Character = target.charIdentifier
 
-    exports.ghmattimysql:execute("INSERT INTO communityservice (identifier, characterid, name, communityservice, servicecount) VALUES (@identifier, @characterid, @name, @communityservice, @servicecount)"
+    exports.ghmattimysql:execute(
+        "INSERT INTO communityservice (identifier, characterid, name, communityservice, servicecount) VALUES (@identifier, @characterid, @name, @communityservice, @servicecount)"
         ,
-        { ["@identifier"] = steam_id, ["@characterid"] = Character, ["@name"] = targetname, ["@communityservice"] = chore,
-            ["@servicecount"] = amount })
+        {
+            ["@identifier"] = steam_id,
+            ["@characterid"] = Character,
+            ["@name"] = targetname,
+            ["@communityservice"] = chore,
+            ["@servicecount"] = amount
+        })
 
     TriggerClientEvent("lawmen:ServicePlayer", player, chore, amount)
     VORPcore.NotifyBottomRight(player, _U('givenservice'), 4000)
 
-    if Config.UseWebhook then
-        VORPcore.AddWebhook(Config.WebhookInfo.ServiceTitle, Config.WebhookInfo.ServiceWebhook,
+    if ConfigWebhook.UseWebhook then
+        VORPcore.AddWebhook(ConfigWebhook.WebhookInfo.ServiceTitle, ConfigWebhook.WebhookInfo.ServiceWebhook,
             Job .. " " .. username .. _U('gaveservice') .. targetname .. amount .. _U('ofchores'),
-            Config.WebhookInfo.ServiceColor,
-            Config.WebhookInfo.ServiceName, Config.WebhookInfo.ServiceLogo, Config.WebhookInfo.ServiceFooterLogo,
-            Config.WebhookInfo.ServiceAvatar)
+            ConfigWebhook.WebhookInfo.ServiceColor,
+            ConfigWebhook.WebhookInfo.ServiceName, ConfigWebhook.WebhookInfo.ServiceLogo,
+            ConfigWebhook.WebhookInfo.ServiceFooterLogo,
+            ConfigWebhook.WebhookInfo.ServiceAvatar)
     end
-
 end)
 
 RegisterServerEvent("lawmen:finishedjail") --Unjail event
@@ -198,15 +239,13 @@ AddEventHandler("lawmen:finishedjail", function(target_id)
     exports.ghmattimysql:execute("SELECT * FROM `jail` WHERE characterid = @characterid",
         { ["@characterid"] = Character }
         , function(result)
-
-        if result[1] then
-            local loc = result[1]["jaillocation"]
-            TriggerClientEvent("lawmen:UnjailPlayer", target_id, loc)
-        end
-    end)
+            if result[1] then
+                local loc = result[1]["jaillocation"]
+                TriggerClientEvent("lawmen:UnjailPlayer", target_id, loc)
+            end
+        end)
     exports.ghmattimysql:execute("DELETE FROM jail WHERE identifier = @identifier AND characterid = @characterid",
-        { ["@identifier"] = steam_id, ["@characterid"] = Character })
-
+        { ["@identifier"] = steam_id,["@characterid"] = Character })
 end)
 
 RegisterServerEvent("lawmen:unjailed") --Unjail event
@@ -222,22 +261,21 @@ AddEventHandler("lawmen:unjailed", function(target_id, loc)
     exports.ghmattimysql:execute("SELECT * FROM `jail` WHERE characterid = @characterid",
         { ["@characterid"] = Character }
         , function(result)
-
-        if result[1] then
-            local loc = result[1]["jaillocation"]
-            TriggerClientEvent("lawmen:UnjailPlayer", target_id, loc)
-        end
-    end)
+            if result[1] then
+                local loc = result[1]["jaillocation"]
+                TriggerClientEvent("lawmen:UnjailPlayer", target_id, loc)
+            end
+        end)
     exports.ghmattimysql:execute("DELETE FROM jail WHERE identifier = @identifier AND characterid = @characterid",
-        { ["@identifier"] = steam_id, ["@characterid"] = Character })
+        { ["@identifier"] = steam_id,["@characterid"] = Character })
 
-    if Config.UseWebhook then
-        VORPcore.AddWebhook(Config.WebhookInfo.JailTitle, Config.WebhookInfo.JailWebhook,
-            Job .. " " .. username .. _U('unjailed') .. targetname, Config.WebhookInfo.JailColor,
-            Config.WebhookInfo.JailName, Config.WebhookInfo.JailLogo, Config.WebhookInfo.JailFooterLogo,
-            Config.WebhookInfo.JailAvatar)
+    if ConfigWebhook.UseWebhook then
+        VORPcore.AddWebhook(ConfigWebhook.WebhookInfo.JailTitle, ConfigWebhook.WebhookInfo.JailWebhook,
+            Job .. " " .. username .. _U('unjailed') .. targetname, ConfigWebhook.WebhookInfo.JailColor,
+            ConfigWebhook.WebhookInfo.JailName, ConfigWebhook.WebhookInfo.JailLogo,
+            ConfigWebhook.WebhookInfo.JailFooterLogo,
+            ConfigWebhook.WebhookInfo.JailAvatar)
     end
-
 end)
 
 RegisterServerEvent('lawmen:GetID') -- Get id event currently not used/ *now fixed
@@ -250,7 +288,6 @@ AddEventHandler('lawmen:GetID', function(player)
     VORPcore.NotifyLeft(_source, _U('idcheck'),
         _U('name') .. Target.firstname .. ' ' .. Target.lastname .. "             " .. _U('job') .. Target.job,
         "toasts_mp_generic", "toast_mp_customer_service", 8000, "COLOR_WHITE")
-
 end)
 
 RegisterServerEvent('lawmen:getVehicleInfo') --Get vehicle/horse owner event
@@ -263,22 +300,23 @@ AddEventHandler('lawmen:getVehicleInfo', function(player, mount)
     exports.ghmattimysql:execute("SELECT * FROM `horses` WHERE charid=@identifier",
         { identifier = Character.charIdentifier }
         , function(result)
-        local found = false
-        if result[1] then
-            for i, v in pairs(result) do
-                if GetHashKey(v.model) == mount then
-                    found = true
-                    VORPcore.NotifyLeft(_source, _U('idcheck'),
-                        _U('name') .. Character.firstname .. ' ' .. Character.lastname .. '', "toasts_mp_generic",
-                        "toast_mp_customer_service", 8000, "COLOR_WHITE")
+            local found = false
+            if result[1] then
+                for i, v in pairs(result) do
+                    if GetHashKey(v.model) == mount then
+                        found = true
+                        VORPcore.NotifyLeft(_source, _U('idcheck'),
+                            _U('name') .. Character.firstname .. ' ' .. Character.lastname .. '', "toasts_mp_generic",
+                            "toast_mp_customer_service", 8000, "COLOR_WHITE")
+                    end
                 end
             end
-        end
-        if not found then
-            VORPcore.NotifyLeft(_source, _U('idcheck'), _U('notowned'), "toasts_mp_generic", "toast_mp_customer_service"
-                , 8000, "COLOR_WHITE")
-        end
-    end)
+            if not found then
+                VORPcore.NotifyLeft(_source, _U('idcheck'), _U('notowned'), "toasts_mp_generic",
+                    "toast_mp_customer_service"
+                    , 8000, "COLOR_WHITE")
+            end
+        end)
 end)
 
 RegisterServerEvent('lawmen:handcuff', function(player)
@@ -318,16 +356,18 @@ AddEventHandler("lawmen:updateservice", function()
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
-    exports.ghmattimysql:execute("SELECT * FROM communityservice WHERE identifier = @identifier AND characterid = @characterid"
-        , { ["@identifier"] = steam_id, ["@characterid"] = Character }, function(result)
-        if result[1] ~= nil then
-            local count = result[1]["servicecount"]
-            local identifier = result[1]["identifier"]
-            local charid = result[1]["characterid"]
-            exports.ghmattimysql:execute("UPDATE communityservice SET servicecount = @count WHERE identifier = @identifier AND characterid = @characterid"
-                , { ["@identifier"] = identifier, ["@characterid"] = charid, ["@count"] = count - 1 })
-        end
-    end)
+    exports.ghmattimysql:execute(
+        "SELECT * FROM communityservice WHERE identifier = @identifier AND characterid = @characterid"
+        , { ["@identifier"] = steam_id,["@characterid"] = Character }, function(result)
+            if result[1] ~= nil then
+                local count = result[1]["servicecount"]
+                local identifier = result[1]["identifier"]
+                local charid = result[1]["characterid"]
+                exports.ghmattimysql:execute(
+                    "UPDATE communityservice SET servicecount = @count WHERE identifier = @identifier AND characterid = @characterid"
+                    , { ["@identifier"] = identifier,["@characterid"] = charid,["@count"] = count - 1 })
+            end
+        end)
 end)
 
 RegisterNetEvent("lawmen:endservice") -- Finished Community Service Event
@@ -337,13 +377,13 @@ AddEventHandler("lawmen:endservice", function()
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
-    exports.ghmattimysql:execute("DELETE FROM communityservice WHERE identifier = @identifier AND characterid = @characterid"
-        , { ["@identifier"] = steam_id, ["@characterid"] = Character }, function(result)
-        if result[1] ~= nil then
-            VORPcore.NotifyBottomRight(_source, _U('servicecomplete'), 4000)
-
-        end
-    end)
+    exports.ghmattimysql:execute(
+        "DELETE FROM communityservice WHERE identifier = @identifier AND characterid = @characterid"
+        , { ["@identifier"] = steam_id,["@characterid"] = Character }, function(result)
+            if result[1] ~= nil then
+                VORPcore.NotifyBottomRight(_source, _U('servicecomplete'), 4000)
+            end
+        end)
 end)
 
 RegisterNetEvent("lawmen:jailedservice") --Jailed from breaking community service event
@@ -355,12 +395,13 @@ AddEventHandler("lawmen:jailedservice", function()
     local steam_id = CharInfo.identifier
 
     local Character = CharInfo.charIdentifier
-    exports.ghmattimysql:execute("DELETE FROM communityservice WHERE identifier = @identifier AND characterid = @characterid"
-        , { ["@identifier"] = steam_id, ["@characterid"] = Character }, function(result)
-        if result[1] ~= nil then
-            VORPcore.NotifyBottomRight(_source, _U('jailed'), 4000)
-        end
-    end)
+    exports.ghmattimysql:execute(
+        "DELETE FROM communityservice WHERE identifier = @identifier AND characterid = @characterid"
+        , { ["@identifier"] = steam_id,["@characterid"] = Character }, function(result)
+            if result[1] ~= nil then
+                VORPcore.NotifyBottomRight(_source, _U('jailed'), 4000)
+            end
+        end)
 end)
 
 
@@ -373,17 +414,17 @@ AddEventHandler("lawmen:check_jail", function()
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
     exports.ghmattimysql:execute("SELECT * FROM jail WHERE identifier = @identifier AND characterid = @characterid",
-        { ["@identifier"] = steam_id, ["@characterid"] = Character }, function(result)
-        if result[1] ~= nil then
-            local time = result[1]["time_s"]
-            local identifier = result[1]["identifier"]
-            exports.ghmattimysql:execute("UPDATE jail SET time = @time WHERE identifier = @identifier",
-                { ["@time"] = getTime() + time, ["@identifier"] = identifier })
-            time = tonumber(time)
-            TriggerClientEvent("lawmen:JailPlayer", _source, time)
-            TriggerEvent("lawmen:wear_prison", _source)
-        end
-    end)
+        { ["@identifier"] = steam_id,["@characterid"] = Character }, function(result)
+            if result[1] ~= nil then
+                local time = result[1]["time_s"]
+                local identifier = result[1]["identifier"]
+                exports.ghmattimysql:execute("UPDATE jail SET time = @time WHERE identifier = @identifier",
+                    { ["@time"] = getTime() + time,["@identifier"] = identifier })
+                time = tonumber(time)
+                TriggerClientEvent("lawmen:JailPlayer", _source, time)
+                TriggerEvent("lawmen:wear_prison", _source)
+            end
+        end)
 end)
 
 RegisterNetEvent("lawmen:jailbreak") --Jail break event, deletes time in jail
@@ -395,8 +436,8 @@ AddEventHandler("lawmen:jailbreak", function()
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
     exports.ghmattimysql:execute("DELETE FROM jail WHERE identifier = @identifier AND characterid = @characterid",
-        { ["@identifier"] = steam_id, ["@characterid"] = Character }, function(result)
-    end)
+        { ["@identifier"] = steam_id,["@characterid"] = Character }, function(result)
+        end)
 end)
 
 RegisterServerEvent("lawmen:taketime") --Updates timer of how long left in jail defined by player
@@ -407,15 +448,15 @@ AddEventHandler("lawmen:taketime", function()
     local steam_id = CharInfo.identifier
     local Character = CharInfo.charIdentifier
     exports.ghmattimysql:execute("SELECT * FROM jail WHERE identifier = @identifier AND characterid = @characterid",
-        { ["@identifier"] = steam_id, ["@characterid"] = Character }, function(result)
-        if result[1] ~= nil then
-            local time = result[1]["time_s"]
-            local newtime = time - 30
-            local identifier = result[1]["identifier"]
-            exports.ghmattimysql:execute("UPDATE jail SET time_s = @time WHERE identifier = @identifier",
-                { ["@time"] = newtime, ["@identifier"] = identifier })
-        end
-    end)
+        { ["@identifier"] = steam_id,["@characterid"] = Character }, function(result)
+            if result[1] ~= nil then
+                local time = result[1]["time_s"]
+                local newtime = time - 30
+                local identifier = result[1]["identifier"]
+                exports.ghmattimysql:execute("UPDATE jail SET time_s = @time WHERE identifier = @identifier",
+                    { ["@time"] = newtime,["@identifier"] = identifier })
+            end
+        end)
 end)
 
 RegisterServerEvent("lawmen:guncabinet") -- Adds weapon from gun cabinet
@@ -474,7 +515,7 @@ AddEventHandler("lawmen:policenotify", function(coords)
     end
 end)
 
-RegisterCommand(Config.finecommand, function(source, args, rawCommand)
+RegisterCommand(ConfigMain.finecommand, function(source, args, rawCommand)
     local _source = source -- player source
     local Character = VORPcore.getUser(_source).getUsedCharacter
     local Job = Character.job
@@ -485,7 +526,7 @@ RegisterCommand(Config.finecommand, function(source, args, rawCommand)
     end
 end)
 
-RegisterCommand(Config.jailcommand, function(source, args, rawCommand)
+RegisterCommand(ConfigMain.jailcommand, function(source, args, rawCommand)
     local _source = source -- player source
     local Character = VORPcore.getUser(_source).getUsedCharacter
     local target = args[1]
@@ -499,7 +540,7 @@ RegisterCommand(Config.jailcommand, function(source, args, rawCommand)
     end
 end)
 
-RegisterCommand(Config.unjailcommand, function(source, args, rawCommand)
+RegisterCommand(ConfigMain.unjailcommand, function(source, args, rawCommand)
     local _source = source -- player source
 
     local Character = VORPcore.getUser(_source).getUsedCharacter
@@ -507,7 +548,7 @@ RegisterCommand(Config.unjailcommand, function(source, args, rawCommand)
     if target then
         if VORPcore.getUser(target) then
             if Character.group == "admin" or CheckTable(OnDutyJobs, job) then
-                TriggerEvent("lawmen:unjailed", tonumber(target))
+                TriggerEvent("lawmen:unjailed", target)
             end
         end
     end
@@ -557,16 +598,16 @@ AddEventHandler('lawmen:TakeFrom', function(obj, steal_source)
             VORPcore.NotifyBottomRight(_source, _U('took') .. decode_obj.number .. " " .. decode_obj.item.label, 4000)
             Wait(100)
             TriggerEvent('lawmen:ReloadInventory', _steal_source, _source)
-            if Config.UseWebhook then
-                VORPcore.AddWebhook(Config.WebhookInfo.SearchedTitle, Config.WebhookInfo.SearchedWebhook,
+            if ConfigWebhook.UseWebhook then
+                VORPcore.AddWebhook(ConfigWebhook.WebhookInfo.SearchedTitle, ConfigWebhook.WebhookInfo.SearchedWebhook,
                     Job ..
                     " " ..
                     username ..
                     _U('took') .. decode_obj.number .. " " .. decode_obj.item.label .. _U('from') .. targetname,
-                    Config.WebhookInfo.SearchedColor,
-                    Config.WebhookInfo.SearchedName, Config.WebhookInfo.SearchedLogo,
-                    Config.WebhookInfo.SearchedFooterLogo,
-                    Config.WebhookInfo.SearchedAvatar)
+                    ConfigWebhook.WebhookInfo.SearchedColor,
+                    ConfigWebhook.WebhookInfo.SearchedName, ConfigWebhook.WebhookInfo.SearchedLogo,
+                    ConfigWebhook.WebhookInfo.SearchedFooterLogo,
+                    ConfigWebhook.WebhookInfo.SearchedAvatar)
             end
         else
         end
@@ -580,16 +621,17 @@ AddEventHandler('lawmen:TakeFrom', function(obj, steal_source)
 
                 Wait(100)
                 TriggerEvent('lawmen:ReloadInventory', _steal_source, _source)
-                if Config.UseWebhook then
-                    VORPcore.AddWebhook(Config.WebhookInfo.SearchedTitle, Config.WebhookInfo.SearchedWebhook,
+                if ConfigWebhook.UseWebhook then
+                    VORPcore.AddWebhook(ConfigWebhook.WebhookInfo.SearchedTitle,
+                        ConfigWebhook.WebhookInfo.SearchedWebhook,
                         Job ..
                         " " ..
                         username ..
                         _U('took') .. decode_obj.number .. " " .. decode_obj.item.label .. _U('from') .. targetname,
-                        Config.WebhookInfo.SearchedColor,
-                        Config.WebhookInfo.SearchedName, Config.WebhookInfo.SearchedLogo,
-                        Config.WebhookInfo.SearchedFooterLogo,
-                        Config.WebhookInfo.SearchedAvatar)
+                        ConfigWebhook.WebhookInfo.SearchedColor,
+                        ConfigWebhook.WebhookInfo.SearchedName, ConfigWebhook.WebhookInfo.SearchedLogo,
+                        ConfigWebhook.WebhookInfo.SearchedFooterLogo,
+                        ConfigWebhook.WebhookInfo.SearchedAvatar)
                 end
             else
             end
