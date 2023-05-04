@@ -20,7 +20,4 @@ Now contains-
 
 -Auto Jail Capability or Manual Jail
 
-****JAIL BREAK NOT CURRENTLY NOTIFYING OR TELEPORTING BACK***
-Next Patch ;)
-
 Big Thanks to the Community for suggestions, feedback, help and more! Here yall go!
