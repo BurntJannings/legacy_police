@@ -4,6 +4,10 @@ A Complete Police Script for VORP Framework
 This originally started as police_job for VORP, after a complete rework, to new VORP Notifications, All new MenuAPI, 
 Removal of commands for police and added to Admins, Fully Migrated to Menu capabilities for Police, Complete new features
 
+NEEDED FOR THE PROMPTS
+*DEPENDENCY*
+https://github.com/VORPCORE/vorp_utils
+
 Now contains-
 
 -Multijob Capbality
@@ -21,3 +25,5 @@ Now contains-
 -Auto Jail Capability or Manual Jail
 
 Big Thanks to the Community for suggestions, feedback, help and more! Here yall go!
+
+
