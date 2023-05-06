@@ -1,21 +1,8 @@
-local IsHandcuffed = false
-local playerJob
-local JailID
-local Autotele = true
+local IsHandcuffed, Autotele, Jailed, InWagon, display, badgeactive, dragStatus = false, true, false, false, false, false, {}
+local playerJob, JailID, currentCheck, jaillocation, Open, Search, searchid
 Choreamount = _U('none')
-local currentCheck
-local jaillocation
-local Jailed = false
-local Open
-local Search
-local searchid
-Takenmoney = nil
-local InWagon = false
-local display = false
-local badgeactive = false
-PoliceOnDuty = nil
+Takenmoney, PoliceOnDuty = nil, nil
 
-local dragStatus = {}
 dragStatus.isDragged = false
 
 local prompt2 = GetRandomIntInRange(0, 0xffffff)
@@ -43,18 +30,6 @@ CreateThread(function()
     PromptSetHoldMode(Search, true, 2000)
     PromptSetGroup(Search, prompt2)
     PromptRegisterEnd(Search)
-end)
-
-local VORPcore = {}
-
-TriggerEvent("getCore", function(core)
-    VORPcore = core
-end)
-
-local VORPutils = {}
-
-TriggerEvent("getUtils", function(utils)
-    VORPutils = utils
 end)
 
 Citizen.CreateThread(function() -- In jail chores to reduce time in jail
@@ -874,5 +849,24 @@ AddEventHandler('onResourceStop', function(resource) -- on resource restart remo
     if resource == GetCurrentResourceName() then
         RemoveBlip(Serviceblip)
         Choreamount = _U('none')
+    end
+end)
+
+------ This will create a commissary at sisika ------
+Citizen.CreateThread(function()
+    if ConfigJail.Jails.sisika.Commisary.enable then
+        while true do
+            Citizen.Wait(5)
+            local pl = GetEntityCoords(PlayerPedId())
+            local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, ConfigJail.Jails.sisika.Commisary.coords.x, ConfigJail.Jails.sisika.Commisary.coords.y, ConfigJail.Jails.sisika.Commisary.coords.z, true)
+            if dist < 5 then
+                DrawText3D(ConfigJail.Jails.sisika.Commisary.coords.x, ConfigJail.Jails.sisika.Commisary.coords.y, ConfigJail.Jails.sisika.Commisary.coords.z, _U('sisika_commisary'))
+                if IsControlJustReleased(0, 0x760A9C6F) then
+                    TriggerServerEvent('legacy_police:CommisaryAddItem')
+                end
+            elseif dist > 200 then
+                Wait(2000)
+            end
+        end
     end
 end)
