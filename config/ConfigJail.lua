@@ -17,6 +17,12 @@ ConfigJail.jailchores = {
 
 ConfigJail.Jails = {
      sisika = {
+          Commisary = {
+               enable = true, --if enabled players will be able to go to this location hit g and get 1 of the food item and water item
+               coords = {x = 3371.04, y = -658.16, z = 46.29}, --coords the commisary will be at
+               FoodItem = 'consumable_salmon_can', --db name of the food item to give
+               WaterItem = 'water', --db name of the water item to give
+          },
           entrance = {
                x = 3359.64, y = -668.57, z = 45.78 --Sisika
           },
