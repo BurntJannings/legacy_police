@@ -683,3 +683,11 @@ AddEventHandler('lawmen:ReloadInventory', function(steal_source, player_source)
     }
     TriggerClientEvent('vorp_inventory:ReloadstealInventory', _source, json.encode(data))
 end)
+
+
+----- Commisary add item ----
+RegisterServerEvent('legacy_police:CommisaryAddItem', function()
+    local _source = source
+    VORPInv.addItem(_source, ConfigJail.Jails.sisika.Commisary.FoodItem, 1)
+    VORPInv.addItem(_source, ConfigJail.Jails.sisika.Commisary.WaterItem, 1)
+end)
