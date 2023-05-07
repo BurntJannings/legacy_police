@@ -1,9 +1,13 @@
 local IsSearching = false
 
-local VORPcore = {}
-
+VORPcore = {}
 TriggerEvent("getCore", function(core)
     VORPcore = core
+end)
+
+VORPutils = {}
+TriggerEvent("getUtils", function(utils)
+    VORPutils = utils
 end)
 
 function HandcuffPlayer() --Handcuff player function
@@ -148,4 +152,20 @@ function GetClosestVehicle(coords)
         end
     end
     return closestObject, closestDistance
+end
+
+function DrawText3D(x, y, z, text)
+    local onScreen,_x,_y=GetScreenCoordFromWorldCoord(x, y, z)
+    local px,py,pz=table.unpack(GetGameplayCamCoord())
+    local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
+    local str = CreateVarString(10, "LITERAL_STRING", text, Citizen.ResultAsLong())
+    if onScreen then
+        SetTextScale(0.30, 0.30)
+        SetTextFontForCurrentCommand(1)
+        SetTextColor(255, 255, 255, 215)
+        SetTextCentre(1)
+        DisplayText(str,_x,_y)
+        local factor = (string.len(text)) / 225
+        DrawSprite("feeds", "hud_menu_4a", _x, _y+0.0125,0.015+ factor, 0.03, 0.1, 35, 35, 35, 190, 0)
+    end
 end

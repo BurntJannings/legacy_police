@@ -117,4 +117,5 @@ Locales['en'] = {
     left = "Move Badge Left",
     right = "Move Badge Right",
     down = "Move Badge Down",
+    sisika_commisary = 'Press "G" to get some food and water.'
 }
