@@ -82,7 +82,6 @@ end)
 
 RegisterServerEvent("lawmen:gooffdutysv") -- Go off duty event
 AddEventHandler("lawmen:gooffdutysv", function()
-    print('offduty is triggered')
     local _source = source
     local player = VORPcore.getUser(_source).getUsedCharacter
     local job = player.job
@@ -100,7 +99,6 @@ end)
 
 RegisterServerEvent("judicial:gooffdutysv") -- Go off duty event
 AddEventHandler("judicial:gooffdutysv", function()
-    print('offduty is triggered')
     local _source = source
     local player = VORPcore.getUser(_source).getUsedCharacter
     local job = player.job
@@ -121,7 +119,6 @@ AddEventHandler('lawmen:FinePlayer', function(player, amount)
     local targetname = target.firstname .. ' ' .. target.lastname
 
     local fine = tonumber(amount)
-    print("fine", fine)
 
     for i, v in pairs(OnDutyJobs) do
         if v == user.job then
@@ -168,7 +165,6 @@ AddEventHandler('lawmen:JailPlayer', function(player, amount, loc)
     local steam_id = target.identifier
     local Character = target.charIdentifier
     -- TIME
-    local time_m = tostring(amount)
     local amount = amount * 60
     local timestamp = getTime() + amount
 
@@ -232,7 +228,6 @@ end)
 
 RegisterServerEvent("lawmen:finishedjail") --Unjail event
 AddEventHandler("lawmen:finishedjail", function(target_id)
-    local _source = source
     local target = VORPcore.getUser(target_id).getUsedCharacter
     local steam_id = target.identifier
     local Character = target.charIdentifier
@@ -320,7 +315,6 @@ AddEventHandler('lawmen:getVehicleInfo', function(player, mount)
 end)
 
 RegisterServerEvent('lawmen:handcuff', function(player)
-    local _source = source
     TriggerClientEvent('lawmen:handcuff', player)
 end)
 
@@ -328,7 +322,6 @@ RegisterServerEvent('lawmen:lockpicksv') --Lockpick Handcuff event
 AddEventHandler('lawmen:lockpicksv', function(player)
     local _source = source
     local chance = math.random(1, 100)
-    local user = VORPcore.getUser(_source).getUsedCharacter
     if chance < 5 then
         VORPInv.subItem(_source, 'lockpick', 1)
         VORPcore.NotifyBottomRight(_source, _U('lockpickbroke'), 4000)
@@ -408,7 +401,7 @@ end)
 RegisterServerEvent("lawmen:check_jail") --Check if jailed when selecting character event
 AddEventHandler("lawmen:check_jail", function()
     local _source = source
-    Citizen.Wait(2000)
+    Wait(2000)
     local User = VORPcore.getUser(_source)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
@@ -430,7 +423,7 @@ end)
 RegisterNetEvent("lawmen:jailbreak") --Jail break event, deletes time in jail
 AddEventHandler("lawmen:jailbreak", function()
     local _source = source
-    Citizen.Wait(1000)
+    Wait(1000)
     local User = VORPcore.getUser(_source)
     local CharInfo = User.getUsedCharacter
     local steam_id = CharInfo.identifier
@@ -478,7 +471,6 @@ end
 RegisterServerEvent('lawmen:lockpick:break') --Lockpick broke event
 AddEventHandler('lawmen:lockpick:break', function()
     local _source = source
-    local user = VORPcore.getUser(_source).getUsedCharacter
     VORPInv.subItem(_source, "lockpick", 1)
     VORPcore.NotifyBottomRight(_source, _U('lockpickbroke'), 4000)
 end)
@@ -504,7 +496,6 @@ end
 
 RegisterServerEvent("lawmen:policenotify")
 AddEventHandler("lawmen:policenotify", function(coords)
-    print(coords)
     for z, m in ipairs(GetPlayers()) do
         local User = VORPcore.getUser(m)
         local used = User.getUsedCharacter
@@ -518,7 +509,6 @@ end)
 RegisterCommand(ConfigMain.finecommand, function(source, args, rawCommand)
     local _source = source -- player source
     local Character = VORPcore.getUser(_source).getUsedCharacter
-    local Job = Character.job
     local target = args[1]
     local fine = args[2]
     if Character.group == "admin" or CheckTable(OnDutyJobs, job) then
@@ -564,7 +554,6 @@ end)
 
 RegisterServerEvent("lawmen:GetPlayerWagonID") -- Take out vehicle event not currently used
 AddEventHandler("lawmen:GetPlayerWagonID", function(player)
-    local _source = source
     if player ~= nil then
         TriggerClientEvent('lawmen:PlayerInWagon', player)
     end
