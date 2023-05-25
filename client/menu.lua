@@ -630,10 +630,9 @@ function SearchMenu(takenmoney) -- Set chore menu logic
     }
     MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
         {
-            title    = "Chore Menu",
+            title    = "Search Menu",
             align    = 'top-left',
-            elements = elements,
-            lastmenu = "OpenPoliceMenu"
+            elements = elements
         },
         function(data, menu)
             if data.current == "backup" then
