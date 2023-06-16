@@ -824,7 +824,7 @@ AddEventHandler('lawmen:HandcuffsChecked', function(hasHandcuffs)
     if hasHandcuffs then
         HandcuffPlayer()
     else
-        VORPcore.NotifyBottomRight(_U('you do not have Handcuff or are not on duty '), 4000)
+        VORPcore.NotifyBottomRight(_U('nocuffs'), 4000)
 
     end
 end)
