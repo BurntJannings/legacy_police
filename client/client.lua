@@ -1,8 +1,9 @@
-local IsHandcuffed, Autotele, Jailed, display, badgeactive, dragStatus = false, true, false, false, false, false, {}
+local IsHandcuffed, Autotele, Jailed, display, badgeactive = false, true, false, false, false, false
 local playerJob, JailID, currentCheck, jaillocation, Open, searchid
 Choreamount = _U('none')
 Takenmoney, PoliceOnDuty, Search,InWagon = nil, nil,nil,nil
 
+local dragStatus = {}
 dragStatus.isDragged = false
 
 Prompt2 = GetRandomIntInRange(0, 0xffffff)
