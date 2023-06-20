@@ -22,7 +22,7 @@ function HandcuffPlayer() --Handcuff player function
             TriggerServerEvent('lawmen:handcuff', targetplayerid)
             if not IsSearching then
                 IsSearching = true
-                --CuffPlayer(closestPlayer)
+                CuffPlayer(closestPlayer)
             elseif IsSearching then
                 IsSearching = false
             end
@@ -73,7 +73,7 @@ function CuffPlayer(closestPlayer) -- Prompt and code to access Gun Cabinets
                     if not Inmenu then
                         if not InWagon then
                             local item_name = CreateVarString(10, 'LITERAL_STRING', _U('searchplayer'))
-                            PromptSetActiveGroupThisFrame(prompt2, item_name)
+                            PromptSetActiveGroupThisFrame(Prompt2, item_name)
                         end
                     end
                 end
