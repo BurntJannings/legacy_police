@@ -1,11 +1,11 @@
-local IsHandcuffed, Autotele, Jailed, InWagon, display, badgeactive, dragStatus = false, true, false, false, false, false, {}
-local playerJob, JailID, currentCheck, jaillocation, Open, Search, searchid
+local IsHandcuffed, Autotele, Jailed, display, badgeactive, dragStatus = false, true, false, false, false, false, {}
+local playerJob, JailID, currentCheck, jaillocation, Open, searchid
 Choreamount = _U('none')
-Takenmoney, PoliceOnDuty = nil, nil
+Takenmoney, PoliceOnDuty, Search,InWagon = nil, nil,nil,nil
 
 dragStatus.isDragged = false
 
-local prompt2 = GetRandomIntInRange(0, 0xffffff)
+Prompt2 = GetRandomIntInRange(0, 0xffffff)
 local prompt = GetRandomIntInRange(0, 0xffffff)
 
 CreateThread(function()
@@ -28,7 +28,7 @@ CreateThread(function()
     PromptSetEnabled(Search, true)
     PromptSetVisible(Search, true)
     PromptSetHoldMode(Search, true, 2000)
-    PromptSetGroup(Search, prompt2)
+    PromptSetGroup(Search, Prompt2)
     PromptRegisterEnd(Search)
 end)
 
