@@ -66,7 +66,7 @@ function CuffPlayer(closestPlayer) -- Prompt and code to access Gun Cabinets
         local tgtcoords = GetEntityCoords(GetPlayerPed(closestPlayer))
         local distance = #(playercoords - tgtcoords)
         local isDead = IsEntityDead(PlayerPedId())
-        Wait(0)
+        Wait(5)
         if distance <= 1.5 then
             if not isDead then
                 if IsSearching then

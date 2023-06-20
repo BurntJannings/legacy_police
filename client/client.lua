@@ -32,9 +32,9 @@ CreateThread(function()
     PromptRegisterEnd(Search)
 end)
 
-Citizen.CreateThread(function() -- In jail chores to reduce time in jail
+CreateThread(function() -- In jail chores to reduce time in jail
     while true do
-        Wait(0)
+        Wait(5)
         if Jailed then
             local doingchore = false
             for k, v in pairs(ConfigJail.jailchores) do
@@ -56,23 +56,23 @@ Citizen.CreateThread(function() -- In jail chores to reduce time in jail
                     end
                 end
             end
+        else
+            Wait(500)
         end
     end
 end)
 
-Citizen.CreateThread(function() -- In jail chores to reduce time in jail
+CreateThread(function() -- In jail chores to reduce time in jail
     while true do
-        Wait(0)
+        Wait(5)
         local playercoords = GetEntityCoords(PlayerPedId())
-        while Jailed do
-            Wait(0)
+        if Jailed then
             if JailID == "sk" then
                 local Jailedcoords = GetEntityCoords(PlayerPedId())
                 local currentCheck = GetDistanceBetweenCoords(Jailedcoords.x, Jailedcoords.y, Jailedcoords.z,
                     ConfigJail.Jails.sisika.entrance.x, ConfigJail.Jails.sisika.entrance.y,
                     ConfigJail.Jails.sisika.entrance.z,
                     true)
-                print(currentCheck)
                 if currentCheck > 420 then
                     TriggerEvent("lawmen:breakout")
                 end
@@ -80,18 +80,19 @@ Citizen.CreateThread(function() -- In jail chores to reduce time in jail
                 local Jailedcoords = GetEntityCoords(PlayerPedId())
                 local currentCheck2 = GetDistanceBetweenCoords(playercoords.x, playercoords.y, playercoords.z,
                     Jailedcoords.x, Jailedcoords.y, Jailedcoords.z, true)
-                print(currentCheck2)
                 if currentCheck2 > 15 then
                     TriggerEvent("lawmen:breakout")
                 end
             end
+        else
+            Wait(500)
         end
     end
 end)
 
-Citizen.CreateThread(function() -- Community Service Logic, including animations minigame difficulty and more
+CreateThread(function() -- Community Service Logic, including animations minigame difficulty and more
     while true do
-        Wait(10)
+        Wait(5)
         local coords = GetEntityCoords(PlayerPedId())
         if Serviced then
             if not Serviceblip then
@@ -140,6 +141,8 @@ Citizen.CreateThread(function() -- Community Service Logic, including animations
                     Brokedistance = false
                 end
             end
+        else
+            Wait(200)
         end
 
         if Choreamount and Choreamount == 0 then
@@ -160,9 +163,9 @@ AddEventHandler("lawmen:ServicePlayer", function(chore, amount)
     Pos = ConfigService.construction[math.random(1, #ConfigService.construction)]
 end)
 
-Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
+CreateThread(function() -- Prompt and code to access Gun Cabinets
     while true do
-        Wait(0)
+        Wait(5)
         local coords = GetEntityCoords(PlayerPedId())
         local isDead = IsEntityDead(PlayerPedId())
         for k, v in pairs(ConfigCabinets.Guncabinets) do
@@ -185,11 +188,13 @@ Citizen.CreateThread(function() -- Prompt and code to access Gun Cabinets
     end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Wait(0)
+        Wait(5)
         if InWagon then
             SetRelationshipBetweenGroups(1, `PLAYER`, `PLAYER`)
+        else
+            Wait(500)
         end
     end
 end)
@@ -213,13 +218,15 @@ AddEventHandler('lawmen:PlayerInWagon', function()
     end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(0)
-        if InWagon == true then
+        Wait(5)
+        if InWagon then
             DisableControlAction(1, 0xFEFAB9B4, true)
             DisableControlAction(1, 0xE31C6A41, true)
             DisableControlAction(1, 0x4CC0E2FE, true)
+        else
+            Wait(500)
         end
     end
 end)
@@ -321,7 +328,6 @@ AddEventHandler("legacy_police:badgeon", function(playerjob, jobgrade)
         elseif playerjob == "police" and jobgrade == 6 then
             --Sheriff
 
-            local ped = PlayerPedId()
             if IsPedMale(ped) then
                 Badge = CreateObject(GetHashKey("s_badgesherif01x"), Badgex, Badgey, Badgez + 0.2, true, false, false)
                 AttachEntityToEntity(Badge, ped, MaleboneIndex, 0.17, -0.19, -0.25, -12.5, 0.0, 30.0, false, true,
@@ -340,7 +346,6 @@ AddEventHandler("legacy_police:badgeon", function(playerjob, jobgrade)
 
             --Rangers
         elseif playerjob == "marshal" and jobgrade ~= nil then
-            local ped = PlayerPedId()
             if IsPedMale(ped) then
                 Badge = CreateObject(GetHashKey("s_badgeusmarshal01x"), Badgex, Badgey, Badgez + 0.2, true, false,
                     false)
@@ -399,7 +404,7 @@ RegisterCommand(ConfigMain.adjustbadgecommand,
                 display = true
                 --Register your first promp
                 while true do
-                    Wait(0)
+                    Wait(5)
 
                     if display and badgeactive then
                         if IsPedMale(ped) then
@@ -461,8 +466,7 @@ RegisterCommand(ConfigMain.offdutycommand, function() -- Go off duty command
 end)
 
 RegisterCommand(ConfigMain.openpolicemenu, function()
-    local isDead = IsEntityDead(PlayerPedId())
-    if PoliceOnDuty and not isDead then
+    if PoliceOnDuty and not IsEntityDead(PlayerPedId()) then
         OpenPoliceMenu()
     else
         return
@@ -470,9 +474,9 @@ RegisterCommand(ConfigMain.openpolicemenu, function()
 end)
 
 -- Disable player actions when handcuffed
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(5)
         if IsHandcuffed then
             DisableControlAction(0, 0xB2F377E8, true) -- Attack
             DisableControlAction(0, 0xC1989F95, true) -- Attack 2
@@ -490,15 +494,17 @@ Citizen.CreateThread(function()
             SetEnableHandcuffs(PlayerPedId(), false)
             DisablePlayerFiring(PlayerPedId(), false)
             SetPedCanPlayGestureAnims(PlayerPedId(), true)
-            Citizen.Wait(500)
+            Wait(500)
+        else
+            Wait(500)
         end
     end
 end)
 
-Citizen.CreateThread(function() -- Logic for dragging person cuffed
+CreateThread(function() -- Logic for dragging person cuffed
     local wasDragged
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(5)
         local playerPed = PlayerPedId()
         if IsHandcuffed and dragStatus.isDragged then
             local targetPed = GetPlayerPed(GetPlayerFromServerId(dragStatus.CopId))
@@ -519,7 +525,7 @@ Citizen.CreateThread(function() -- Logic for dragging person cuffed
             wasDragged = false
             DetachEntity(playerPed, true, false)
         else
-            Citizen.Wait(500)
+            Wait(500)
         end
     end
 end)
@@ -537,7 +543,6 @@ AddEventHandler("lawmen:JailPlayer", function(time, Location)
     local ped = PlayerPedId()
     local time_minutes = math.floor(time / 60)
     JailID = Location
-    print(Location)
     Serviced = false
     if not Jailed then
         if Autotele then
@@ -676,11 +681,13 @@ AddEventHandler("lawmen:UnjailPlayer", function(jaillocation)
     end
 end)
 
-Citizen.CreateThread(function() --Display timer when in jail logic
+CreateThread(function() --Display timer when in jail logic
     while true do
-        Wait(0)
+        Wait(5)
         if Jailed then
             DrawTxt(_U('imprisoned') .. Jail_time .. _U('jailseconds'), 0.38, 0.95, 0.4, 0.4, true, 255, 0, 0, 255, false)
+        else
+            Wait(200)
         end
     end
 end)
@@ -697,27 +704,25 @@ AddEventHandler("lawmen:lockpick", function()
 
     if closestPlayer ~= -1 and closestDistance <= 3.0 then
         local chance = math.random(1, 100)
-        print("chance", chance)
         if not isDead then
             if chance < 85 then
-                local ped = PlayerPedId()
                 local anim = "mini_games@story@mud5@cracksafe_look_at_dial@med_r@ped"
                 local idle = "base_idle"
                 local lr = "left_to_right"
                 local rl = "right_to_left"
                 RequestAnimDict(anim)
                 while not HasAnimDictLoaded(anim) do
-                    Citizen.Wait(50)
+                    Wait(50)
                 end
 
                 TaskPlayAnim(PlayerPedId(), anim, idle, 8.0, -8.0, -1, 32, 0, false, false, false)
-                Citizen.Wait(1250)
+                Wait(1250)
                 TaskPlayAnim(PlayerPedId(), anim, lr, 8.0, -8.0, -1, 32, 0, false, false, false)
-                Citizen.Wait(325)
+                Wait(325)
                 TaskPlayAnim(PlayerPedId(), anim, idle, 8.0, -8.0, -1, 32, 0, false, false, false)
-                Citizen.Wait(1250)
+                Wait(1250)
                 TaskPlayAnim(PlayerPedId(), anim, rl, 8.0, -8.0, -1, 32, 0, false, false, false)
-                Citizen.Wait(325)
+                Wait(325)
                 repeat
                     TriggerEvent("lawmen:lockpick")
                 until (chance)
@@ -728,12 +733,11 @@ AddEventHandler("lawmen:lockpick", function()
                 if breakChance < 3 then
                     TriggerServerEvent("lawmen:lockpick:break")
                 else
-                    local ped = PlayerPedId()
                     local anim = "mini_games@story@mud5@cracksafe_look_at_dial@small_r@ped"
                     local open = "open"
                     RequestAnimDict(anim)
                     while not HasAnimDictLoaded(anim) do
-                        Citizen.Wait(50)
+                        Wait(50)
                     end
                     TaskPlayAnim(PlayerPedId(), anim, open, 8.0, -8.0, -1, 32, 0, false, false, false)
                     Citizen.Wait(1250)
@@ -747,10 +751,9 @@ AddEventHandler("lawmen:lockpick", function()
     end
 end)
 
-Citizen.CreateThread(function() -- Added time if over max distance/count down until unJailed logic
+CreateThread(function() -- Added time if over max distance/count down until unJailed logic
     while true do
         if Jailed then
-            local ped = PlayerPedId()
             local local_player = PlayerId()
             if not GetPlayerInvincible(local_player) then
                 SetPlayerInvincible(local_player, true)
@@ -761,41 +764,41 @@ Citizen.CreateThread(function() -- Added time if over max distance/count down un
             else
                 Jail_time = Jail_time - 1
             end
-            Citizen.Wait(1000)
+            Wait(1000)
         end
-        Citizen.Wait(0)
+        Wait(0)
     end
 end)
 
-Citizen.CreateThread(function() -- Added time if over max distance/count down until unJailed logic
+CreateThread(function() -- Added time if over max distance/count down until unJailed logic
     while true do
-        Wait(0)
+        Wait(5)
         if Jailed then
             Wait(ConfigJail.JailSettings.UpdateJailTime)
             TriggerServerEvent("lawmen:taketime")
+        else
+            Wait(500)
         end
     end
 end)
 
 RegisterNetEvent('lawmen:handcuff', function()
     local playerPed = PlayerPedId()
-    Citizen.CreateThread(function()
-        if not IsHandcuffed then
-            IsHandcuffed = true
-            SetEnableHandcuffs(playerPed, true)
-            Citizen.InvokeNative(0x7981037A96E7D174, playerPed)                --Cuff Ped Native
-            DisablePlayerFiring(playerPed, true)
-            SetCurrentPedWeapon(playerPed, GetHashKey('WEAPON_UNARMED'), true) -- unarm player
-            SetPedCanPlayGestureAnims(playerPed, false)
-        else
-            IsHandcuffed = false
-            ClearPedSecondaryTask(playerPed)
-            SetEnableHandcuffs(playerPed, false)
-            Citizen.InvokeNative(0x67406F2C8F87FC4F, playerPed) --Uncuff Ped Native
-            DisablePlayerFiring(playerPed, false)
-            SetPedCanPlayGestureAnims(playerPed, true)
-        end
-    end)
+    if not IsHandcuffed then
+        IsHandcuffed = true
+        SetEnableHandcuffs(playerPed, true)
+        Citizen.InvokeNative(0x7981037A96E7D174, playerPed)                --Cuff Ped Native
+        DisablePlayerFiring(playerPed, true)
+        SetCurrentPedWeapon(playerPed, GetHashKey('WEAPON_UNARMED'), true) -- unarm player
+        SetPedCanPlayGestureAnims(playerPed, false)
+    else
+        IsHandcuffed = false
+        ClearPedSecondaryTask(playerPed)
+        SetEnableHandcuffs(playerPed, false)
+        Citizen.InvokeNative(0x67406F2C8F87FC4F, playerPed) --Uncuff Ped Native
+        DisablePlayerFiring(playerPed, false)
+        SetPedCanPlayGestureAnims(playerPed, true)
+    end
 end)
 
 RegisterNetEvent('lawmen:lockpicked') -- Successful lockpick event
@@ -808,15 +811,15 @@ AddEventHandler('lawmen:lockpicked', function()
     IsHandcuffed = false
 end)
 
-Citizen.CreateThread(function() -- Timer for leaving community service logic, which jails player
+CreateThread(function() -- Timer for leaving community service logic, which jails player
     while true do
-        Wait(0)
+        Wait(5)
         local gametime = GetGameTimer()
         local seconds = ConfigService.CommunityServiceSettings
             .communityservicetimer -- max time (seconds) you want to set
         local printtime = seconds
         while Brokedistance do
-            Wait(0)
+            Wait(5)
             if printtime > 0 then
                 local diftime = GetGameTimer() - gametime
                 printtime = math.floor(seconds - (diftime / 1000))
@@ -838,7 +841,6 @@ Citizen.CreateThread(function() -- Timer for leaving community service logic, wh
 end)
 
 RegisterNetEvent("lawmen:witness", function(coords)
-    print(coords)
     VORPcore.NotifyLeft(_U('crimereported'), _U('jailbreakalert'), "generic_textures", "star", 6000)
     local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 20.0)
     Wait(60000) --Time till notify blips dispears, 1 min
@@ -853,10 +855,10 @@ AddEventHandler('onResourceStop', function(resource) -- on resource restart remo
 end)
 
 ------ This will create a commissary at sisika ------
-Citizen.CreateThread(function()
+CreateThread(function()
     if ConfigJail.Jails.sisika.Commisary.enable then
         while true do
-            Citizen.Wait(5)
+            Wait(5)
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, ConfigJail.Jails.sisika.Commisary.coords.x, ConfigJail.Jails.sisika.Commisary.coords.y, ConfigJail.Jails.sisika.Commisary.coords.z, true)
             if dist < 5 then
