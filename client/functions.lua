@@ -22,7 +22,7 @@ function HandcuffPlayer() --Handcuff player function
             TriggerServerEvent('lawmen:handcuff', targetplayerid)
             if not IsSearching then
                 IsSearching = true
-                --CuffPlayer(closestPlayer)
+                CuffPlayer(closestPlayer)
             elseif IsSearching then
                 IsSearching = false
             end
@@ -66,14 +66,14 @@ function CuffPlayer(closestPlayer) -- Prompt and code to access Gun Cabinets
         local tgtcoords = GetEntityCoords(GetPlayerPed(closestPlayer))
         local distance = #(playercoords - tgtcoords)
         local isDead = IsEntityDead(PlayerPedId())
-        Wait(0)
+        Wait(5)
         if distance <= 1.5 then
             if not isDead then
                 if IsSearching then
                     if not Inmenu then
                         if not InWagon then
                             local item_name = CreateVarString(10, 'LITERAL_STRING', _U('searchplayer'))
-                            PromptSetActiveGroupThisFrame(prompt2, item_name)
+                            PromptSetActiveGroupThisFrame(Prompt2, item_name)
                         end
                     end
                 end
