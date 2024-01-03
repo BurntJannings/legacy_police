@@ -680,3 +680,22 @@ RegisterServerEvent('legacy_police:CommisaryAddItem', function()
     VORPInv.addItem(_source, ConfigJail.Jails.sisika.Commisary.FoodItem, 1)
     VORPInv.addItem(_source, ConfigJail.Jails.sisika.Commisary.WaterItem, 1)
 end)
+----- check handcuffs are in inv ----
+
+
+RegisterServerEvent('lawmen:CheckHandcuffs')
+AddEventHandler('lawmen:CheckHandcuffs', function()
+    local _source = source
+    local hasHandcuffs = false
+
+    TriggerEvent('vorpCore:getUserInventory', tonumber(_source), function(inventory)
+        for _, item in pairs(inventory) do
+            if item.name == 'handcuffs' then
+                hasHandcuffs = true
+                break
+            end
+        end
+
+        TriggerClientEvent('lawmen:HandcuffsChecked', _source, hasHandcuffs)
+    end)
+end)
