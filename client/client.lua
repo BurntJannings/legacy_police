@@ -761,6 +761,8 @@ CreateThread(function() -- Added time if over max distance/count down until unJa
             end
             if Jail_time < 1 then
                 local player_server_id = GetPlayerServerId(PlayerId())
+            RemoveBlip(Serviceblip)
+            Serviceblip = nil
                 TriggerServerEvent("lawmen:finishedjail", player_server_id, jaillocation)
             else
                 Jail_time = Jail_time - 1
