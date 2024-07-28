@@ -802,26 +802,27 @@ RegisterNetEvent('lawmen:handcuff', function()
     end
 end)
 
-Citizen.CreateThread(function()
-while true do
-    TriggerServerEvent("lawmen:PlayerJob") 
-    Wait(200)
-    if CheckTable(OnDutyJobs, playerJob) then
-        if IsControlPressed(0, 0x8AAA0AD4) then
-            if IsDisabledControlPressed(0, 0xE30CD707) then 
-                TriggerServerEvent('lawmen:CheckHandcuffs')
-            end
-        end
-    end
-    if CheckTable(OffDutyJobs, playerJob)  then
-        if IsControlPressed(0, 0x8AAA0AD4) then
-            if IsDisabledControlPressed(0, 0xE30CD707) then 
-                VORPcore.NotifyBottomRight(_U('youarenotonduty'), 4000)
-    
+RegisterNetEvent("vorp:SelectedCharacter", function(charid)
+    Citizen.CreateThread(function()
+    while true do
+            TriggerServerEvent("lawmen:PlayerJob") 
+                Wait(200)
+        if CheckTable(OnDutyJobs, playerJob) then
+            if IsControlPressed(0, 0x8AAA0AD4) then
+                if IsDisabledControlPressed(0, 0xE30CD707) then 
+                    TriggerServerEvent('lawmen:CheckHandcuffs')
                 end
             end
         end
-    end
+            if CheckTable(OffDutyJobs, playerJob)  then
+                if IsControlPressed(0, 0x8AAA0AD4) then
+                    if IsDisabledControlPressed(0, 0xE30CD707) then 
+                        VORPcore.NotifyBottomRight(_U('youarenotonduty'), 4000)
+                    end
+                end
+            end
+        end
+    end)
 end)
 RegisterNetEvent('lawmen:HandcuffsChecked')
 AddEventHandler('lawmen:HandcuffsChecked', function(hasHandcuffs)
